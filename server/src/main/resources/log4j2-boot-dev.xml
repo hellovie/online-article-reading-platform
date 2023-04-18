@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 开发环境，外部用户无法访问，开发人员使用，版本变动很大。 -->
+
+<!-- 自动加载配置文件5s -->
+<configuration status="info" monitorInterval="5">
+    <properties>
+        <property name="LOG_HOME">
+            D://log
+        </property>
+        <property name="CONSOLE_PATTERN">
+            %clr{[DEV] %d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{%5p} %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n%xwEx
+        </property>
+        <property name="FILE_PATTERN">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${sys:PID} --- [%15.15t] %-40.40c{1.} : %m%n%xwEx
+        </property>
+    </properties>
+
+    <!-- 日志处理 -->
+    <Appenders>
+        <!-- 控制台输出 appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${CONSOLE_PATTERN}"/>
+            <!-- 日志级别的过滤器 -->
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Console>
+
+        <!-- 日志文件输出 appender -->
+        <File name="File" fileName="${LOG_HOME}/online-article-reading-system.log">
+            <PatternLayout pattern="${FILE_PATTERN}"/>
+            <!-- 日志级别的过滤器 -->
+            <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+        </File>
+    </Appenders>
+
+    <!-- logger 定义 -->
+    <Loggers>
+        <!-- 自定义 logger -->
+        <Logger name="com.hellovie" level="trace" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File" />
+        </Logger>
+
+        <!-- 通过修改 root 的 level 可以快速过滤日志 -->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+
+</configuration>
