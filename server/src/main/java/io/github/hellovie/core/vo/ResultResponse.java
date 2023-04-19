@@ -1,5 +1,7 @@
-package io.github.hellovie.exception;
+package io.github.hellovie.core.vo;
 
+import io.github.hellovie.exception.CommonExceptionType;
+import io.github.hellovie.exception.IExceptionType;
 import lombok.Data;
 
 import java.util.Date;

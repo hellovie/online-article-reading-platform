@@ -14,7 +14,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum ModuleManage {
     /** 通用模块 */
-    COMMON_MODULE(10, CommonExceptionType.class),;
+    COMMON_MODULE(10, CommonExceptionType.class),
+
+    ;
 
     /** 模块编号 */
     private int num;

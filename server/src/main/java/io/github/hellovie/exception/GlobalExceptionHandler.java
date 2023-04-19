@@ -1,9 +1,11 @@
 package io.github.hellovie.exception;
 
+import io.github.hellovie.core.vo.ResultResponse;
 import io.github.hellovie.exception.business.BusinessException;
 import io.github.hellovie.exception.system.SystemException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -21,6 +23,20 @@ import java.io.StringWriter;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+    /**
+     * Http Code: 403(无权限访问！)
+     * 无权限访问异常 spring security授权异常处理
+     *
+     * @param ex 异常信息
+     * @return ResultResponse(code+message)
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResultResponse accessDeniedHandler(Exception ex)
+    {
+        return ResultResponse.fail(HttpStatus.FORBIDDEN.value(), "无权限访问！");
+    }
+
     /**
      * Http Code: 400(请求错误)
      * 1. 业务异常
