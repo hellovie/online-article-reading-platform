@@ -1,18 +1,18 @@
-package io.github.hellovie.core.domain;
+package io.github.hellovie.core;
 
 import lombok.Data;
 
 import java.util.Date;
 
 /**
- * Entity基类
+ * Data Transfer Object基类
  *
  * @author hellovie
  * @Email hellovie@foxmail.com
  * @createTime 2023/4/20 17:04
  */
 @Data
-public abstract class BaseEntity {
+public abstract class BaseDTO {
     /** 主键 */
     private String id;
 
