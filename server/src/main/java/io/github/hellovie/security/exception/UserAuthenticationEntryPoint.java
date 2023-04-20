@@ -1,7 +1,7 @@
 package io.github.hellovie.security.exception;
 
 import cn.hutool.json.JSONUtil;
-import io.github.hellovie.core.vo.ResultResponse;
+import io.github.hellovie.core.ResultResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

@@ -1,6 +1,6 @@
 package io.github.hellovie.exception;
 
-import io.github.hellovie.core.vo.ResultResponse;
+import io.github.hellovie.core.ResultResponse;
 import io.github.hellovie.exception.business.BusinessException;
 import io.github.hellovie.exception.system.SystemException;
 import lombok.extern.slf4j.Slf4j;

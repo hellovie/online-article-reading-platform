@@ -1,7 +1,7 @@
 package io.github.hellovie.core.controller;
 
 import io.github.hellovie.exception.CommonExceptionType;
-import io.github.hellovie.core.vo.ResultResponse;
+import io.github.hellovie.core.ResultResponse;
 import io.github.hellovie.exception.system.SystemException;
 import io.github.hellovie.security.util.TokenUtil;
 import org.springframework.web.bind.annotation.*;
