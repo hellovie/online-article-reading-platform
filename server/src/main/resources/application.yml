@@ -13,10 +13,12 @@ spring:
       max-wait: 60000
       # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
       time-between-eviction-runs-millis: 60000
+  # spring-data-jpa
+  jpa:
+    enerate-ddl: false
+    show-sql: true
+    database: mysql
   # flyway
   flyway:
-    enabled: on
-  # spring-boot2.6以上版本swagger解决方案
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
+    enabled: true
+    encoding: UTF-8

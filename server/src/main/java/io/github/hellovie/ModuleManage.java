@@ -2,6 +2,7 @@ package io.github.hellovie;
 
 import io.github.hellovie.exception.CommonExceptionType;
 import io.github.hellovie.exception.IExceptionType;
+import io.github.hellovie.user.domain.enums.UserExceptionType;
 import lombok.AllArgsConstructor;
 
 /**
@@ -15,6 +16,7 @@ import lombok.AllArgsConstructor;
 public enum ModuleManage {
     /** 通用模块 */
     COMMON_MODULE(10, CommonExceptionType.class),
+    USER_MODULE(11, UserExceptionType.class),
 
     ;
 

@@ -10,7 +10,9 @@ import io.github.hellovie.ModuleManage;
  * @createTime 2023/4/19 12:26
  */
 public enum CommonExceptionType implements IExceptionType {
+    /** 调用成功 */
     SUCCESS(1, "调用成功！"),
+    /** 未知错误 */
     UNKNOWN_EXCEPTION(999, "服务器繁忙，请稍后再试！");
 
     /** 状态码 */

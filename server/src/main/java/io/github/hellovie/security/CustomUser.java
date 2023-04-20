@@ -32,7 +32,7 @@ public class CustomUser implements UserDetails {
     /** 用户角色 */
     private List<GrantedAuthority> authorities;
 
-    CustomUser(String username, String password, List<GrantedAuthority> authorities) {
+    public CustomUser(String username, String password, List<GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
         this.authorities = authorities;

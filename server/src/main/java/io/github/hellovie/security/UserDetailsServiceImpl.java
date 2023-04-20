@@ -17,7 +17,7 @@ import java.util.List;
  * @Email hellovie@foxmail.com
  * @createTime 2023/4/19 15:00
  */
-@Service
+@Service("userDetailsServiceImpl")
 public class UserDetailsServiceImpl implements UserDetailsService {
     /**
      * 验证请求登录的用户信息
@@ -28,7 +28,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Todo：对接数据库，查询数据表中的用户信息进行比对。
         String databaseUsername = "root";
         // 明文密码：hellovie
         String databasePassword = "{bcrypt}$2a$10$GmDhlfd38VtSLiw3YD6gJujo/xhpiwLIEQgtx0eLGr1VFdZNfkJdm";

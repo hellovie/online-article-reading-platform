@@ -35,13 +35,11 @@ import java.util.Map;
         jsr250Enabled = true
 )
 public class SecurityConfig {
-    // Todo：需要获取能与数据库交互的验证服务的bean
-
-    @Resource(name="userDetailsServiceImpl")
+    @Resource(name="userServiceImpl")
     private UserDetailsService userDetailsService;
 
     /** 放行接口 */
-    private static final String[] ALLOWED_INTERFACES = {"/test", "/test/login"};
+    private static final String[] ALLOWED_INTERFACES = {"/users/login", "/users/register"};
 
     /** JWT加密密钥 */
     public static final String SECRET = "HellovieSecretKey";

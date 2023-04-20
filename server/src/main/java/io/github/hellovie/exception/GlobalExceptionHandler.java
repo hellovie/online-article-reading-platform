@@ -2,6 +2,9 @@ package io.github.hellovie.exception;
 
 import io.github.hellovie.core.ResultResponse;
 import io.github.hellovie.exception.business.BusinessException;
+import io.github.hellovie.exception.business.DatabaseFieldConflictException;
+import io.github.hellovie.exception.business.DatabaseFieldNotFoundException;
+import io.github.hellovie.exception.business.DatabaseFieldVerifyException;
 import io.github.hellovie.exception.system.SystemException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,6 +38,60 @@ public class GlobalExceptionHandler {
     public ResultResponse accessDeniedHandler(Exception ex)
     {
         return ResultResponse.fail(HttpStatus.FORBIDDEN.value(), "无权限访问！");
+    }
+
+    /**
+     * Http Code: 409(请求与服务器端目标资源的当前状态相冲突)
+     * 1. 数据库字段值冲突异常
+     *
+     * @param ex 异常信息
+     * @return ResultResponse(code+message)
+     */
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler({
+            DatabaseFieldConflictException.class, // 数据库字段值冲突异常
+    })
+    public ResultResponse conflictExceptionHandler(BusinessException ex)
+    {
+        // 记录日志
+        log.warn("[#" + ex.getCode() + "]{ " + ex.getMessage() + " }");
+        return ResultResponse.fail(ex.getCode(), ex.getMessage());
+    }
+
+    /**
+     * Http Code: 404(服务器无法找到所请求的资源)
+     * 1. 数据库字段值不存在异常
+     *
+     * @param ex 异常信息
+     * @return ResultResponse(code+message)
+     */
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({
+            DatabaseFieldNotFoundException.class, // 数据库字段值不存在异常
+    })
+    public ResultResponse notFoundExceptionHandler(BusinessException ex)
+    {
+        // 记录日志
+        log.warn("[#" + ex.getCode() + "]{ " + ex.getMessage() + " }");
+        return ResultResponse.fail(ex.getCode(), ex.getMessage());
+    }
+
+    /**
+     * Http Code: 422(服务器理解请求实体的内容类型，并且请求实体的语法是正确的，但是服务器无法处理所包含的指令)
+     * 1. 数据库字段值验证异常
+     *
+     * @param ex 异常信息
+     * @return ResultResponse(code+message)
+     */
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler({
+            DatabaseFieldVerifyException.class, // 数据库字段值验证异常
+    })
+    public ResultResponse unprocessableEntityExceptionHandler(BusinessException ex)
+    {
+        // 记录日志
+        log.warn("[#" + ex.getCode() + "]{ " + ex.getMessage() + " }");
+        return ResultResponse.fail(ex.getCode(), ex.getMessage());
     }
 
     /**
