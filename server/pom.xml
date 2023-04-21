@@ -30,6 +30,10 @@
                 <maven.compiler.target>1.8</maven.compiler.target>
 
                 <!-- 其他变量 -->
+                <!-- jsr 303 -->
+                <validation-api.version>1.1.0.Final</validation-api.version>
+                <!-- hibernate validator -->
+                <hibernate-validate.version>5.2.0.Final</hibernate-validate.version>
                 <!-- hutool工具类 -->
                 <hutool.version>5.7.22</hutool.version>
                 <!-- lombok -->
@@ -55,6 +59,20 @@
     </profiles>
 
     <dependencies>
+        <!-- jsr 303 -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${validation-api.version}</version>
+        </dependency>
+
+        <!-- hibernate validator -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validate.version}</version>
+        </dependency>
+
         <!-- hutool工具类 -->
         <dependency>
             <groupId>cn.hutool</groupId>

@@ -12,6 +12,14 @@ import io.github.hellovie.ModuleManage;
 public enum CommonExceptionType implements IExceptionType {
     /** 调用成功 */
     SUCCESS(1, "调用成功！"),
+    /** Request Object是字段验证失败 */
+    VALIDATION_FAILED(2, "数据不符合要求！"),
+    /** HTTP未知异常 */
+    HTTP_ERROR(3, "无法处理该请求！"),
+    /** HTTP消息不可读异常 */
+    HTTP_MESSAGE_NOT_READABLE(4, "请求参数有误！"),
+    /** HTTP请求方法不支持异常 */
+    HTTP_REQUEST_METHOD_NOT_SUPPORT(5, "请求方法有误！"),
     /** 未知错误 */
     UNKNOWN_EXCEPTION(999, "服务器繁忙，请稍后再试！");
 

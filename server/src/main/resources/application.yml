@@ -15,9 +15,13 @@ spring:
       time-between-eviction-runs-millis: 60000
   # spring-data-jpa
   jpa:
-    enerate-ddl: false
+    generate-ddl: false
     show-sql: true
     database: mysql
+    properties:
+      hibernate:
+        format_sql: true
+
   # flyway
   flyway:
     enabled: true

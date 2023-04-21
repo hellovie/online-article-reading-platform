@@ -3,6 +3,7 @@ package io.github.hellovie.core;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.MappedSuperclass;
@@ -22,6 +23,7 @@ public abstract class BaseEntity {
     @Id
     @GeneratedValue(generator = "ksuid")
     @GenericGenerator(name = "ksuid", strategy = "io.github.hellovie.core.KsuidIdentifierGenerator")
+    @Column(updatable = false)
     private String id;
 
     /** 创建时间 */

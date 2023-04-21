@@ -10,6 +10,7 @@ import io.github.hellovie.user.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 /**
  * 用户api
@@ -33,7 +34,7 @@ public class UserController {
      * @return 登录用户的信息及token令牌
      */
     @PostMapping("/login")
-    public ResultResponse<LoginVO> login(@RequestBody LoginRequest request) {
+    public ResultResponse<LoginVO> login(@Valid @RequestBody LoginRequest request) {
         LoginVO loginVO = userMapper.toVO(userService.login(request));
         return ResultResponse.success(loginVO);
     }
@@ -45,7 +46,7 @@ public class UserController {
      * @return 用户信息
      */
     @PostMapping("/register")
-    public ResultResponse<UserVO> register(@RequestBody RegisterRequest request) {
+    public ResultResponse<UserVO> register(@Valid @RequestBody RegisterRequest request) {
         UserVO userVO = userMapper.toVO(userService.register(request));
         return ResultResponse.success(userVO);
     }

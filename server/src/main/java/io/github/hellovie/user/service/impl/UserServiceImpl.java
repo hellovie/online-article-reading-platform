@@ -5,7 +5,6 @@ import io.github.hellovie.exception.business.DatabaseFieldNotFoundException;
 import io.github.hellovie.exception.business.DatabaseFieldVerifyException;
 import io.github.hellovie.security.CustomUser;
 import io.github.hellovie.security.util.TokenUtil;
-import io.github.hellovie.user.domain.enums.UserExceptionType;
 import io.github.hellovie.user.repository.UserRepository;
 import io.github.hellovie.user.domain.dto.LoginDTO;
 import io.github.hellovie.user.domain.dto.UserDTO;
@@ -28,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static io.github.hellovie.user.domain.enums.UserExceptionType.*;
 
 /**
  * 用户服务实现类
@@ -54,10 +55,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.getByUsername(username);
+        User user = checkUser(username);
         List<Role> roles = user.getRoles();
         List<GrantedAuthority> authorities = new ArrayList<>(roles.size());
         roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRoleKey())));
+
         CustomUser customUser = new CustomUser(user.getUsername(), user.getPassword(), authorities);
         customUser.setLocked(user.getLocked());
         customUser.setEnabled(user.getEnabled());
@@ -79,7 +81,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = checkUser(username);
         // 校验密码
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new DatabaseFieldVerifyException(UserExceptionType.LOGIN_FAILED);
+            throw new DatabaseFieldVerifyException(LOGIN_FAILED);
         }
         LoginDTO loginDTO = userMapper.toDto(user);
         loginDTO.setToken(TokenUtil.createToken(user.getUsername()));
@@ -99,7 +101,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // 用户存在抛出异常
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
-            throw new DatabaseFieldConflictException(UserExceptionType.USER_EXIST);
+            throw new DatabaseFieldConflictException(USER_EXIST);
         }
 
         // 密文存储
@@ -127,7 +129,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private User checkUser(String username) {
         Optional<User> user = userRepository.findByUsername(username);
         if (!user.isPresent()) {
-            throw new DatabaseFieldNotFoundException(UserExceptionType.USER_NOT_FOUND);
+            throw new DatabaseFieldNotFoundException(USER_NOT_FOUND);
         }
         return user.get();
     }
