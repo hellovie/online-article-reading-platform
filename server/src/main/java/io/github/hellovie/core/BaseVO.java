@@ -15,13 +15,13 @@ import java.util.Date;
 @Data
 public abstract class BaseVO {
     /** 主键 */
-    private String id;
+    protected String id;
 
     /** 创建时间 */
     @JsonFormat(timezone = "GMT+8", pattern= "yyyy-MM-dd HH:mm:ss")
-    private Date gmtCreate;
+    protected Date gmtCreate;
 
     /** 更新时间 */
     @JsonFormat(timezone = "GMT+8", pattern= "yyyy-MM-dd HH:mm:ss")
-    private Date gmtModified;
+    protected Date gmtModified;
 }

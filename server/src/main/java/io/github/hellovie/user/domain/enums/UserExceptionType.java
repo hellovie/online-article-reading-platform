@@ -17,6 +17,8 @@ public enum UserExceptionType implements IExceptionType {
     USER_NOT_FOUND(2, "用户不存在！"),
     /** 账号或密码错误 */
     LOGIN_FAILED(3, "账号或密码错误！"),
+    /** 用户权限不足 */
+    NO_PERMISSION(4, "用户权限不足！"),
 
     ;
 

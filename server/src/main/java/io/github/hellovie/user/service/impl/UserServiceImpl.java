@@ -3,18 +3,25 @@ package io.github.hellovie.user.service.impl;
 import io.github.hellovie.exception.business.DatabaseFieldConflictException;
 import io.github.hellovie.exception.business.DatabaseFieldNotFoundException;
 import io.github.hellovie.exception.business.DatabaseFieldVerifyException;
+import io.github.hellovie.exception.business.ForbiddenException;
 import io.github.hellovie.security.CustomUser;
 import io.github.hellovie.security.util.TokenUtil;
-import io.github.hellovie.user.domain.dto.LoginDTO;
+import io.github.hellovie.user.domain.dto.UserDTO;
 import io.github.hellovie.user.domain.entity.Role;
 import io.github.hellovie.user.domain.entity.User;
+import io.github.hellovie.user.domain.enums.UserStatus;
 import io.github.hellovie.user.domain.request.LoginRequest;
 import io.github.hellovie.user.domain.request.RegisterRequest;
+import io.github.hellovie.user.domain.request.UserStatusRequest;
 import io.github.hellovie.user.mapper.UserMapper;
 import io.github.hellovie.user.repository.UserRepository;
 import io.github.hellovie.user.service.UserService;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,13 +29,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static io.github.hellovie.user.domain.enums.RoleEnum.ROLE_USER;
+import static io.github.hellovie.user.domain.enums.RolesConstant.ROLE_SUPER_ADMIN_KEY;
+import static io.github.hellovie.user.domain.enums.RolesConstant.ROLE_USER_ID;
 import static io.github.hellovie.user.domain.enums.UserExceptionType.*;
+import static io.github.hellovie.user.domain.enums.UserStatus.*;
 
 /**
  * 用户服务实现类
@@ -38,6 +44,7 @@ import static io.github.hellovie.user.domain.enums.UserExceptionType.*;
  * @createTime 2023/4/20 19:57
  */
 @Service("userServiceImpl")
+@Log4j2
 public class UserServiceImpl implements UserService, UserDetailsService {
     @Resource(name = "userRepository")
     private UserRepository userRepository;
@@ -45,6 +52,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private UserMapper userMapper;
     @Resource(name = "passwordEncoder")
     private PasswordEncoder passwordEncoder;
+
+    /**
+     * 获取当前的访问用户
+     *
+     * @return 用户DTO
+     */
+    @Override
+    public UserDTO getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return userMapper.toDto(checkUserByUsername(authentication.getName()));
+    }
 
     /**
      * 验证请求登录的用户信息
@@ -55,7 +73,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = checkUser(username);
+        User user = checkUserByUsername(username);
         List<Role> roles = user.getRoles();
         List<GrantedAuthority> authorities = new ArrayList<>(roles.size());
         roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRoleKey())));
@@ -71,14 +89,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      *
      * @param request 用户登录所需信息
      * @param ip      访问的IP地址
-     * @return 包含少量用户信息和token令牌的DTO
+     * @return (" user " : 用户信息), (" token " : token令牌)
      */
     @Override
-    public LoginDTO login(LoginRequest request, String ip) {
+    public Map<String, Object> login(LoginRequest request, String ip) {
         String username = request.getUsername();
         String password = request.getPassword();
         // 验证用户是否存在
-        User user = checkUser(username);
+        User user = checkUserByUsername(username);
         // 校验密码
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new DatabaseFieldVerifyException(LOGIN_FAILED);
@@ -86,11 +104,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // 记录最后登录时间和IP
         user.setLastLoginTime(new Date());
         user.setLastLoginIp(ip);
+
         User saveUser = userRepository.save(user);
 
-        LoginDTO loginDTO = userMapper.toDto(saveUser);
-        loginDTO.setToken(TokenUtil.createToken(saveUser.getUsername()));
-        return loginDTO;
+        HashMap<String, Object> map = new HashMap<>(2);
+        map.put("user", userMapper.toDto(saveUser));
+        map.put("token", TokenUtil.createToken(saveUser.getUsername()));
+        return map;
     }
 
     /**
@@ -98,10 +118,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      *
      * @param request 注册用户所需信息
      * @param ip      访问的IP地址
-     * @return 包含少量用户信息和token令牌的DTO
+     * @return (" user " : 用户信息), (" token " : token令牌)
      */
     @Override
-    public LoginDTO register(RegisterRequest request, String ip) {
+    public Map<String, Object> register(RegisterRequest request, String ip) {
         String username = request.getUsername();
         // 用户存在抛出异常
         Optional<User> userOptional = userRepository.findByUsername(username);
@@ -123,25 +143,77 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // 绑定普通用户角色身份
         ArrayList<Role> roles = new ArrayList<>();
         Role role = new Role();
-        role.setId(ROLE_USER.roleId());
+        role.setId(ROLE_USER_ID);
         roles.add(role);
         user.setRoles(roles);
 
         User saveUser = userRepository.save(user);
-        LoginDTO loginDTO = userMapper.toDto(saveUser);
-        loginDTO.setToken(TokenUtil.createToken(saveUser.getUsername()));
-        return loginDTO;
+
+        HashMap<String, Object> map = new HashMap<>(2);
+        map.put("user", userMapper.toDto(saveUser));
+        map.put("token", TokenUtil.createToken(saveUser.getUsername()));
+        return map;
+    }
+
+    /**
+     * 设置用户状态(启用/禁用，锁定/解锁)
+     *
+     * @param request 要修改的用户ID和设置的状态
+     */
+    @Override
+    public void changeUserStatus(UserStatusRequest request) {
+        UserStatus status = request.getStatus();
+        // 查询用户是否存在，存在则开始设置状态
+        User changeUser = checkUserById(request.getUserId());
+
+        // 低权限(锁定和解锁)，直接进行设置
+        if (status == LOCK || status == UNLOCK) {
+            changeUser.setLocked(status == LOCK);
+            userRepository.save(changeUser);
+            return;
+        }
+
+        // 高权限(禁用和启用)
+        // 当前请求的用户是否为超级管理员，只有超级管理员才能启用或禁用用户。
+        List<String> rolesKey = new ArrayList<>();
+        getCurrentUser().getRoles().forEach(role -> {
+            rolesKey.add(role.getRoleKey());
+        });
+        // 属于超级管理员同时是执行启用或禁用用户，才能执行操作。
+        boolean isPermission = rolesKey.contains(ROLE_SUPER_ADMIN_KEY) && (status == ENABLE || status == DISABLE);
+        if (isPermission) {
+            changeUser.setEnabled(status == ENABLE);
+            userRepository.save(changeUser);
+            return;
+        } else {
+            throw new ForbiddenException(NO_PERMISSION);
+        }
     }
 
     /**
      * 判断用户是否存在，不存在则抛出异常
      *
      * @param username 用户名
-     * @throw DatabaseFieldNotFoundException 用户不存在
      * @return 用户信息
+     * @throw DatabaseFieldNotFoundException 用户不存在
      */
-    private User checkUser(String username) {
+    private User checkUserByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
+        if (!user.isPresent()) {
+            throw new DatabaseFieldNotFoundException(USER_NOT_FOUND);
+        }
+        return user.get();
+    }
+
+    /**
+     * 判断用户是否存在，不存在则抛出异常
+     *
+     * @param id ID
+     * @return 用户信息
+     * @throw DatabaseFieldNotFoundException 用户不存在
+     */
+    private User checkUserById(String id) {
+        Optional<User> user = userRepository.findById(id);
         if (!user.isPresent()) {
             throw new DatabaseFieldNotFoundException(USER_NOT_FOUND);
         }

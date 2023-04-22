@@ -1,10 +1,7 @@
 package io.github.hellovie.exception;
 
 import io.github.hellovie.core.ResultResponse;
-import io.github.hellovie.exception.business.BusinessException;
-import io.github.hellovie.exception.business.DatabaseFieldConflictException;
-import io.github.hellovie.exception.business.DatabaseFieldNotFoundException;
-import io.github.hellovie.exception.business.DatabaseFieldVerifyException;
+import io.github.hellovie.exception.business.*;
 import io.github.hellovie.exception.system.SystemException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,9 +40,13 @@ public class GlobalExceptionHandler {
      * @param ex 异常信息
      * @return ResultResponse(code + message)
      */
-    @ExceptionHandler(AccessDeniedException.class)
+    @ExceptionHandler({AccessDeniedException.class, ForbiddenException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResultResponse accessDeniedHandler(Exception ex) {
+        if (ex.getClass() == ForbiddenException.class) {
+            ForbiddenException forbiddenEx = (ForbiddenException) ex;
+            return ResultResponse.fail(forbiddenEx.getCode(), forbiddenEx.getMessage());
+        }
         return ResultResponse.fail(HttpStatus.FORBIDDEN.value(), "无权限访问！");
     }
 

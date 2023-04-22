@@ -26,14 +26,14 @@ public abstract class BaseEntity {
     @GeneratedValue(generator = "ksuid")
     @GenericGenerator(name = "ksuid", strategy = "io.github.hellovie.core.KsuidIdentifierGenerator")
     @Column(updatable = false)
-    private String id;
+    protected String id;
 
     /** 创建时间 */
     @CreationTimestamp
     @Column(updatable = false)
-    private Date gmtCreate;
+    protected Date gmtCreate;
 
     /** 更新时间 */
     @UpdateTimestamp
-    private Date gmtModified;
+    protected Date gmtModified;
 }

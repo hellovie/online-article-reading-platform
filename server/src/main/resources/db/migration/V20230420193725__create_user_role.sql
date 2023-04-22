@@ -5,5 +5,8 @@ CREATE TABLE `user_role`
     CONSTRAINT FK_UserRole_User_On_UserId
         FOREIGN KEY (user_id) REFERENCES `user` (id),
     CONSTRAINT FK_UserRole_Role_On_RoleId
-        FOREIGN KEY (role_id) REFERENCES `role` (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '用户角色表';
+        FOREIGN KEY (role_id) REFERENCES `role` (id),
+    CONSTRAINT PRIMARY KEY (user_id, role_id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci COMMENT '用户角色表';

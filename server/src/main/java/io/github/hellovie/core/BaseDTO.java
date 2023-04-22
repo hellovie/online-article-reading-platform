@@ -14,11 +14,11 @@ import java.util.Date;
 @Data
 public abstract class BaseDTO {
     /** 主键 */
-    private String id;
+    protected String id;
 
     /** 创建时间 */
-    private Date gmtCreate;
+    protected Date gmtCreate;
 
     /** 更新时间 */
-    private Date gmtModified;
+    protected Date gmtModified;
 }

@@ -17,11 +17,11 @@ public enum CommonExceptionType implements IExceptionType {
     /** 无效访问或异常访问 */
     ACCESS_EXCEPTION(3, "访问异常！"),
     /** HTTP消息不可读异常 */
-    HTTP_MESSAGE_NOT_READABLE(4, "请求参数有误！"),
+    HTTP_MESSAGE_NOT_READABLE(4, "无法解析请求参数！"),
     /** HTTP请求方法不支持异常 */
-    HTTP_REQUEST_METHOD_NOT_SUPPORT(5, "请求方法有误！"),
+    HTTP_REQUEST_METHOD_NOT_SUPPORT(5, "无法解析请求方法！"),
     /** 未知Host异常 */
-    UNKNOWN_HOST(7, "无法识别主机！"),
+    UNKNOWN_HOST(6, "无法识别主机！"),
     /** 未知错误 */
     UNKNOWN_EXCEPTION(999, "服务器繁忙，请稍后再试！");
 
