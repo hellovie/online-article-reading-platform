@@ -1,7 +1,6 @@
 package io.github.hellovie.user.service;
 
 import io.github.hellovie.user.domain.dto.LoginDTO;
-import io.github.hellovie.user.domain.dto.UserDTO;
 import io.github.hellovie.user.domain.request.LoginRequest;
 import io.github.hellovie.user.domain.request.RegisterRequest;
 
@@ -17,15 +16,17 @@ public interface UserService {
      * 登录账号
      *
      * @param request 用户登录所需信息
+     * @param ip 访问的IP地址
      * @return 包含少量用户信息和token令牌的DTO
      */
-    LoginDTO login(LoginRequest request);
+    LoginDTO login(LoginRequest request, String ip);
 
     /**
-     * 注册账号
+     * 注册账号(普通用户)
      *
      * @param request 注册用户所需信息
-     * @return 用户信息
+     * @param ip 访问的IP地址
+     * @return 包含少量用户信息和token令牌的DTO
      */
-    UserDTO register(RegisterRequest request);
+    LoginDTO register(RegisterRequest request, String ip);
 }

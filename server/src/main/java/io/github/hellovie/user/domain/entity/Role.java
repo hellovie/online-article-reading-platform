@@ -1,10 +1,9 @@
 package io.github.hellovie.user.domain.entity;
 
 import io.github.hellovie.core.BaseEntity;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -15,9 +14,10 @@ import javax.persistence.Entity;
  * @createTime 2023/4/20 20:12
  */
 @Data
-@Entity
+@Entity(name = "Role")
 public class Role extends BaseEntity {
     /** 角色标识 */
+    @Column(updatable = false)
     private String roleKey;
 
     /** 角色昵称 */

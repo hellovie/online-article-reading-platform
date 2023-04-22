@@ -4,12 +4,16 @@ import io.github.hellovie.core.ResultResponse;
 import io.github.hellovie.user.domain.request.LoginRequest;
 import io.github.hellovie.user.domain.request.RegisterRequest;
 import io.github.hellovie.user.domain.vo.LoginVO;
-import io.github.hellovie.user.domain.vo.UserVO;
 import io.github.hellovie.user.mapper.UserMapper;
 import io.github.hellovie.user.service.UserService;
-import org.springframework.web.bind.annotation.*;
+import io.github.hellovie.user.util.IpUtil;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -34,8 +38,8 @@ public class UserController {
      * @return 登录用户的信息及token令牌
      */
     @PostMapping("/login")
-    public ResultResponse<LoginVO> login(@Valid @RequestBody LoginRequest request) {
-        LoginVO loginVO = userMapper.toVO(userService.login(request));
+    public ResultResponse<LoginVO> login(HttpServletRequest httpRequest, @Valid @RequestBody LoginRequest request) {
+        LoginVO loginVO = userMapper.toVO(userService.login(request, IpUtil.getIpAddr(httpRequest)));
         return ResultResponse.success(loginVO);
     }
 
@@ -46,8 +50,8 @@ public class UserController {
      * @return 用户信息
      */
     @PostMapping("/register")
-    public ResultResponse<UserVO> register(@Valid @RequestBody RegisterRequest request) {
-        UserVO userVO = userMapper.toVO(userService.register(request));
-        return ResultResponse.success(userVO);
+    public ResultResponse<LoginVO> register(HttpServletRequest httpRequest, @Valid @RequestBody RegisterRequest request) {
+        LoginVO loginVO = userMapper.toVO(userService.register(request, IpUtil.getIpAddr(httpRequest)));
+        return ResultResponse.success(loginVO);
     }
 }

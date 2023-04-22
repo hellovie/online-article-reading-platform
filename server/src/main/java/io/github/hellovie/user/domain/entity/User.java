@@ -15,9 +15,10 @@ import java.util.List;
  * @createTime 2023/4/20 19:46
  */
 @Data
-@Entity
+@Entity(name = "User")
 public class User extends BaseEntity {
     /** 用户名 */
+    @Column(updatable = false)
     private String username;
 
     /** 用户昵称 */

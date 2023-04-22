@@ -1,11 +1,10 @@
 package io.github.hellovie.user.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.github.hellovie.core.BaseVO;
-import io.github.hellovie.user.domain.entity.Role;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * 去除敏感数据的用户VO
@@ -26,8 +25,6 @@ public class UserVO extends BaseVO {
     private String lastLoginIp;
 
     /** 最后登录时间 */
+    @JsonFormat(timezone = "GMT+8", pattern= "yyyy-MM-dd HH:mm:ss")
     private Date lastLoginTime;
-
-    /** 角色列表 */
-    private List<Role> roles;
 }

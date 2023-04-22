@@ -14,12 +14,14 @@ public enum CommonExceptionType implements IExceptionType {
     SUCCESS(1, "调用成功！"),
     /** Request Object是字段验证失败 */
     VALIDATION_FAILED(2, "数据不符合要求！"),
-    /** HTTP未知异常 */
-    HTTP_ERROR(3, "无法处理该请求！"),
+    /** 无效访问或异常访问 */
+    ACCESS_EXCEPTION(3, "访问异常！"),
     /** HTTP消息不可读异常 */
     HTTP_MESSAGE_NOT_READABLE(4, "请求参数有误！"),
     /** HTTP请求方法不支持异常 */
     HTTP_REQUEST_METHOD_NOT_SUPPORT(5, "请求方法有误！"),
+    /** 未知Host异常 */
+    UNKNOWN_HOST(7, "无法识别主机！"),
     /** 未知错误 */
     UNKNOWN_EXCEPTION(999, "服务器繁忙，请稍后再试！");
 

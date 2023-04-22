@@ -1,13 +1,13 @@
 package io.github.hellovie.user.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.github.hellovie.core.BaseVO;
-import io.github.hellovie.user.domain.entity.Role;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Date;
 
 /**
- * 登录用户后得到的VO
+ * 登录用户后得到的VO(注册用户自动登录)
  *
  * @author hellovie
  * @Email hellovie@foxmail.com
@@ -21,8 +21,12 @@ public class LoginVO extends BaseVO {
     /** 用户昵称 */
     private String nickname;
 
-    /** 角色列表 */
-    private List<Role> roles;
+    /** 最后登录IP */
+    private String lastLoginIp;
+
+    /** 最后登录时间 */
+    @JsonFormat(timezone = "GMT+8", pattern= "yyyy-MM-dd HH:mm:ss")
+    private Date lastLoginTime;
 
     /** token令牌 */
     private String token;

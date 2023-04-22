@@ -5,14 +5,13 @@ import io.github.hellovie.exception.business.DatabaseFieldNotFoundException;
 import io.github.hellovie.exception.business.DatabaseFieldVerifyException;
 import io.github.hellovie.security.CustomUser;
 import io.github.hellovie.security.util.TokenUtil;
-import io.github.hellovie.user.repository.UserRepository;
 import io.github.hellovie.user.domain.dto.LoginDTO;
-import io.github.hellovie.user.domain.dto.UserDTO;
 import io.github.hellovie.user.domain.entity.Role;
 import io.github.hellovie.user.domain.entity.User;
 import io.github.hellovie.user.domain.request.LoginRequest;
 import io.github.hellovie.user.domain.request.RegisterRequest;
 import io.github.hellovie.user.mapper.UserMapper;
+import io.github.hellovie.user.repository.UserRepository;
 import io.github.hellovie.user.service.UserService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static io.github.hellovie.user.domain.enums.RoleEnum.ROLE_USER;
 import static io.github.hellovie.user.domain.enums.UserExceptionType.*;
 
 /**
@@ -70,11 +70,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      * 登录账号
      *
      * @param request 用户登录所需信息
-     * @throw DatabaseFieldVerifyException 账号或密码错误
+     * @param ip      访问的IP地址
      * @return 包含少量用户信息和token令牌的DTO
      */
     @Override
-    public LoginDTO login(LoginRequest request) {
+    public LoginDTO login(LoginRequest request, String ip) {
         String username = request.getUsername();
         String password = request.getPassword();
         // 验证用户是否存在
@@ -83,20 +83,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new DatabaseFieldVerifyException(LOGIN_FAILED);
         }
-        LoginDTO loginDTO = userMapper.toDto(user);
-        loginDTO.setToken(TokenUtil.createToken(user.getUsername()));
+        // 记录最后登录时间和IP
+        user.setLastLoginTime(new Date());
+        user.setLastLoginIp(ip);
+        User saveUser = userRepository.save(user);
+
+        LoginDTO loginDTO = userMapper.toDto(saveUser);
+        loginDTO.setToken(TokenUtil.createToken(saveUser.getUsername()));
         return loginDTO;
     }
 
     /**
-     * 注册账号
+     * 注册账号(普通用户)
      *
      * @param request 注册用户所需信息
-     * @throw DatabaseFieldConflictException 用户已存在
-     * @return 用户信息
+     * @param ip      访问的IP地址
+     * @return 包含少量用户信息和token令牌的DTO
      */
     @Override
-    public UserDTO register(RegisterRequest request) {
+    public LoginDTO register(RegisterRequest request, String ip) {
         String username = request.getUsername();
         // 用户存在抛出异常
         Optional<User> userOptional = userRepository.findByUsername(username);
@@ -113,10 +118,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setUsername(username);
         user.setPassword(password);
         Date now = new Date();
+        user.setLastLoginTime(now);
         user.setGmtCreate(now);
         user.setGmtModified(now);
-        userRepository.save(user);
-        return userMapper.toEntity(user);
+        user.setLastLoginIp(ip);
+        ArrayList<Role> roles = new ArrayList<>();
+        Role role = new Role();
+        role.setId(ROLE_USER.roleId());
+        roles.add(role);
+        user.setRoles(roles);
+
+        User saveUser = userRepository.save(user);
+        LoginDTO loginDTO = userMapper.toDto(saveUser);
+        loginDTO.setToken(TokenUtil.createToken(saveUser.getUsername()));
+        return loginDTO;
     }
 
     /**

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import static io.github.hellovie.exception.CommonExceptionType.*;
@@ -76,6 +77,7 @@ public class GlobalExceptionHandler {
      * Http Code: 400(请求错误)
      * 1. 请求数据参数不符合要求
      * 2. 请求方法有误
+     * 3. 未知Host异常
      *
      * @param ex 异常信息
      * @return ResultResponse(code + message)
@@ -83,17 +85,19 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
             HttpMessageNotReadableException.class, // HTTP消息不可读异常
-            HttpRequestMethodNotSupportedException.class // HTTP请求方法不支持异常
+            HttpRequestMethodNotSupportedException.class, // HTTP请求方法不支持异常
+            UnknownHostException.class // 未知Host异常
     })
     public ResultResponse HTTPExceptionHandler(Exception ex) {
         if (ex.getClass() == HttpMessageNotReadableException.class) {
             return ResultResponse.fail(HTTP_MESSAGE_NOT_READABLE);
         } else if (ex.getClass() == HttpRequestMethodNotSupportedException.class) {
             return ResultResponse.fail(HTTP_REQUEST_METHOD_NOT_SUPPORT);
+        } else if (ex.getClass() == UnknownHostException.class) {
+            return ResultResponse.fail(UNKNOWN_HOST);
         }
-        return ResultResponse.fail(HTTP_ERROR);
+        return ResultResponse.fail(ACCESS_EXCEPTION);
     }
-
 
     /**
      * Http Code: 409(请求与服务器端目标资源的当前状态相冲突)
