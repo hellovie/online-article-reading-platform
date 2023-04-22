@@ -117,11 +117,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setNickname(username);
         user.setUsername(username);
         user.setPassword(password);
-        Date now = new Date();
-        user.setLastLoginTime(now);
-        user.setGmtCreate(now);
-        user.setGmtModified(now);
+        // 设置最后登录IP和最后登录时间
+        user.setLastLoginTime(new Date());
         user.setLastLoginIp(ip);
+        // 绑定普通用户角色身份
         ArrayList<Role> roles = new ArrayList<>();
         Role role = new Role();
         role.setId(ROLE_USER.roleId());

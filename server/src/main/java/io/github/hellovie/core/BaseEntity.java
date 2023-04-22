@@ -1,7 +1,9 @@
 package io.github.hellovie.core;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -27,8 +29,11 @@ public abstract class BaseEntity {
     private String id;
 
     /** 创建时间 */
+    @CreationTimestamp
+    @Column(updatable = false)
     private Date gmtCreate;
 
     /** 更新时间 */
+    @UpdateTimestamp
     private Date gmtModified;
 }
