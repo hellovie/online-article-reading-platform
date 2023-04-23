@@ -16,11 +16,7 @@ spring:
   # spring-data-jpa
   jpa:
     generate-ddl: false
-    show-sql: true
     database: mysql
-    properties:
-      hibernate:
-        format_sql: true
 
   # flyway
   flyway:
