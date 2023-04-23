@@ -155,11 +155,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     /**
      * 设置用户状态(启用/禁用，锁定/解锁)
+     * 自己无法更改自己的状态。
      *
      * @param request 要修改的用户ID和设置的状态
      */
     @Override
     public void changeUserStatus(UserStatusRequest request) {
+        UserDTO currentUser = getCurrentUser();
+        // 不允许用户修改自己的状态
+        if (request.getUserId() == null || currentUser.getId() == null ||
+            request.getUserId().equals(currentUser.getId())) {
+            throw new ForbiddenException(NO_PERMISSION);
+        }
+
         Set<String> lowStatus = new HashSet<>(2);
         lowStatus.add(LOCK.name());
         lowStatus.add(UNLOCK.name());
@@ -181,7 +189,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // 高权限(禁用和启用)
         // 当前请求的用户是否为超级管理员，只有超级管理员才能启用或禁用用户。
         List<String> rolesKey = new ArrayList<>();
-        getCurrentUser().getRoles().forEach(role -> {
+        currentUser.getRoles().forEach(role -> {
             rolesKey.add(role.getRoleKey());
         });
         // 属于超级管理员同时是执行启用或禁用用户，才能执行操作。
