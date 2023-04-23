@@ -1,4 +1,4 @@
-package io.github.hellovie.core;
+package io.github.hellovie.core.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

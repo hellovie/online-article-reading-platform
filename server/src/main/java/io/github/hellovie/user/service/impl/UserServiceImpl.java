@@ -9,7 +9,6 @@ import io.github.hellovie.security.util.TokenUtil;
 import io.github.hellovie.user.domain.dto.UserDTO;
 import io.github.hellovie.user.domain.entity.Role;
 import io.github.hellovie.user.domain.entity.User;
-import io.github.hellovie.user.domain.enums.UserStatus;
 import io.github.hellovie.user.domain.request.LoginRequest;
 import io.github.hellovie.user.domain.request.RegisterRequest;
 import io.github.hellovie.user.domain.request.UserStatusRequest;
@@ -17,7 +16,6 @@ import io.github.hellovie.user.mapper.UserMapper;
 import io.github.hellovie.user.repository.UserRepository;
 import io.github.hellovie.user.service.UserService;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -162,13 +160,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      */
     @Override
     public void changeUserStatus(UserStatusRequest request) {
-        UserStatus status = request.getStatus();
+        Set<String> lowStatus = new HashSet<>(2);
+        lowStatus.add(LOCK.name());
+        lowStatus.add(UNLOCK.name());
+        Set<String> highStatus = new HashSet<>(2);
+        highStatus.add(ENABLE.name());
+        highStatus.add(DISABLE.name());
+
+        String status = request.getStatus();
         // 查询用户是否存在，存在则开始设置状态
         User changeUser = checkUserById(request.getUserId());
 
         // 低权限(锁定和解锁)，直接进行设置
-        if (status == LOCK || status == UNLOCK) {
-            changeUser.setLocked(status == LOCK);
+        if (lowStatus.contains(status)) {
+            changeUser.setLocked(LOCK.name().equals(status));
             userRepository.save(changeUser);
             return;
         }
@@ -180,9 +185,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             rolesKey.add(role.getRoleKey());
         });
         // 属于超级管理员同时是执行启用或禁用用户，才能执行操作。
-        boolean isPermission = rolesKey.contains(ROLE_SUPER_ADMIN_KEY) && (status == ENABLE || status == DISABLE);
+        boolean isPermission = rolesKey.contains(ROLE_SUPER_ADMIN_KEY) && highStatus.contains(status);
         if (isPermission) {
-            changeUser.setEnabled(status == ENABLE);
+            changeUser.setEnabled(ENABLE.name().equals(status));
             userRepository.save(changeUser);
             return;
         } else {

@@ -1,4 +1,4 @@
-package io.github.hellovie.core;
+package io.github.hellovie.core.util;
 
 import io.github.hellovie.exception.CommonExceptionType;
 import io.github.hellovie.exception.IExceptionType;

@@ -1,6 +1,6 @@
 package io.github.hellovie.user.domain.entity;
 
-import io.github.hellovie.core.BaseEntity;
+import io.github.hellovie.core.domain.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;

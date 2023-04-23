@@ -1,7 +1,7 @@
 package io.github.hellovie.user.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.github.hellovie.core.BaseVO;
+import io.github.hellovie.core.domain.BaseVO;
 import lombok.Data;
 
 import java.util.Date;

@@ -1,4 +1,4 @@
-package io.github.hellovie.core;
+package io.github.hellovie.core.domain;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,7 +24,7 @@ public abstract class BaseEntity {
     /** 主键 */
     @Id
     @GeneratedValue(generator = "ksuid")
-    @GenericGenerator(name = "ksuid", strategy = "io.github.hellovie.core.KsuidIdentifierGenerator")
+    @GenericGenerator(name = "ksuid", strategy = "io.github.hellovie.core.util.KsuidIdentifierGenerator")
     @Column(updatable = false)
     protected String id;
 

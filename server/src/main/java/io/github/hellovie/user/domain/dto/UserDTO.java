@@ -1,6 +1,6 @@
 package io.github.hellovie.user.domain.dto;
 
-import io.github.hellovie.core.BaseDTO;
+import io.github.hellovie.core.domain.BaseDTO;
 import io.github.hellovie.user.domain.entity.Role;
 import lombok.Data;
 

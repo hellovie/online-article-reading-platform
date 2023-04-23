@@ -1,4 +1,4 @@
-package io.github.hellovie.core;
+package io.github.hellovie.core.util;
 
 import com.github.ksuid.KsuidGenerator;
 import org.hibernate.HibernateException;

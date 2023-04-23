@@ -1,6 +1,6 @@
 package io.github.hellovie.user.controller;
 
-import io.github.hellovie.core.ResultResponse;
+import io.github.hellovie.core.util.ResultResponse;
 import io.github.hellovie.user.domain.dto.UserDTO;
 import io.github.hellovie.user.domain.request.LoginRequest;
 import io.github.hellovie.user.domain.request.RegisterRequest;
