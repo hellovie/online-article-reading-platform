@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
  * @Email hellovie@foxmail.com
  * @createTime 2023/4/19 13:11
  */
-@AllArgsConstructor
 public enum ModuleManage {
     /** 通用模块 */
     COMMON_MODULE(10, CommonExceptionType.class),
@@ -24,6 +23,11 @@ public enum ModuleManage {
     private int num;
     /** 模块异常枚举类 */
     private Class<? extends IExceptionType> typeClass;
+
+    ModuleManage(int num, Class<? extends IExceptionType> typeClass) {
+        this.num = num;
+        this.typeClass = typeClass;
+    }
 
     /**
      * 获取模块编号

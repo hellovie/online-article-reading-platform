@@ -77,8 +77,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRoleKey())));
 
         CustomUser customUser = new CustomUser(user.getUsername(), user.getPassword(), authorities);
-        customUser.setLocked(user.getLocked());
-        customUser.setEnabled(user.getEnabled());
+        customUser.setLocked(user.getLocked())
+                .setEnabled(user.getEnabled());
         return customUser;
     }
 
@@ -100,8 +100,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new DatabaseFieldVerifyException(LOGIN_FAILED);
         }
         // 记录最后登录时间和IP
-        user.setLastLoginTime(new Date());
-        user.setLastLoginIp(ip);
+        user.setLastLoginTime(new Date()).setLastLoginIp(ip);
 
         User saveUser = userRepository.save(user);
 
@@ -130,14 +129,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // 密文存储
         String password = passwordEncoder.encode(request.getPassword());
 
-        // 注册用户
+        // 注册用户，设置最后登录IP和最后登录时间
         User user = new User();
-        user.setNickname(username);
-        user.setUsername(username);
-        user.setPassword(password);
-        // 设置最后登录IP和最后登录时间
-        user.setLastLoginTime(new Date());
-        user.setLastLoginIp(ip);
+        user.setNickname(username)
+                .setUsername(username)
+                .setPassword(password)
+                .setLastLoginTime(new Date())
+                .setLastLoginIp(ip);
+
         // 绑定普通用户角色身份
         ArrayList<Role> roles = new ArrayList<>();
         Role role = new Role();
