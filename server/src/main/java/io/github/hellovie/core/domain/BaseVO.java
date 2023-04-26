@@ -1,6 +1,7 @@
 package io.github.hellovie.core.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,13 +16,16 @@ import java.util.Date;
 @Data
 public abstract class BaseVO {
     /** 主键 */
+    @ApiModelProperty(value = "用户ID")
     protected String id;
 
     /** 创建时间 */
+    @ApiModelProperty(value = "创建时间")
     @JsonFormat(timezone = "GMT+8", pattern= "yyyy-MM-dd HH:mm:ss")
     protected Date gmtCreate;
 
     /** 更新时间 */
+    @ApiModelProperty(value = "更新时间")
     @JsonFormat(timezone = "GMT+8", pattern= "yyyy-MM-dd HH:mm:ss")
     protected Date gmtModified;
 }

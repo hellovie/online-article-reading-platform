@@ -9,6 +9,8 @@ import io.github.hellovie.user.domain.vo.LoginVO;
 import io.github.hellovie.user.mapper.UserMapper;
 import io.github.hellovie.user.service.UserService;
 import io.github.hellovie.user.util.IpUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,7 @@ import static io.github.hellovie.user.domain.enums.RolesConstant.ROLE_SUPER_ADMI
  * @Email hellovie@foxmail.com
  * @createTime 2023/4/20 20:28
  */
+@Api(tags = "用户账号信息接口")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -44,6 +47,7 @@ public class UserController {
      * @param request 登录用户所需的信息
      * @return 登录用户的信息及token令牌
      */
+    @ApiOperation("用户登录")
     @PostMapping("/login")
     public ResultResponse<LoginVO> login(HttpServletRequest httpRequest, @Valid @RequestBody LoginRequest request) {
         Map<String, Object> map = userService.login(request, IpUtil.getIpAddr(httpRequest));
@@ -58,6 +62,7 @@ public class UserController {
      * @param request 注册用户所需的信息
      * @return 用户信息
      */
+    @ApiOperation("用户注册")
     @PostMapping("/register")
     public ResultResponse<LoginVO> register(HttpServletRequest httpRequest, @Valid @RequestBody RegisterRequest request) {
         Map<String, Object> map = userService.register(request, IpUtil.getIpAddr(httpRequest));
@@ -72,6 +77,7 @@ public class UserController {
      * @param request 修改用户状态所需信息
      * @return 无数据
      */
+    @ApiOperation("设置用户状态")
     @PostMapping("/status")
     @RolesAllowed({ROLE_ADMIN_KEY, ROLE_SUPER_ADMIN_KEY})
     public ResultResponse changeStatus(@Valid @RequestBody UserStatusRequest request) {

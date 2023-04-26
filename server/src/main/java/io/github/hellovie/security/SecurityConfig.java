@@ -39,7 +39,16 @@ public class SecurityConfig {
     private UserDetailsService userDetailsService;
 
     /** 放行接口 */
-    private static final String[] ALLOWED_INTERFACES = {"/users/login", "/users/register"};
+    private static final String[] ALLOWED_INTERFACES = {
+            "/users/login",
+            "/users/register",
+            // swagger放行
+            "/swagger-ui.html",
+            "/swagger-ui/*",
+            "/swagger-resources/**",
+            "/v2/api-docs",
+            "/v3/api-docs",
+            "/webjars/**"};
 
     /** JWT加密密钥 */
     public static final String SECRET = "HellovieSecretKey";

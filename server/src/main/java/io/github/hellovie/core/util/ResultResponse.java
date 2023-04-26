@@ -1,10 +1,13 @@
 package io.github.hellovie.core.util;
 
-import io.github.hellovie.exception.CommonExceptionType;
 import io.github.hellovie.exception.IExceptionType;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
+
+import static io.github.hellovie.exception.CommonExceptionType.SUCCESS;
 
 /**
  * 返回前端信息封装
@@ -13,18 +16,23 @@ import java.util.Date;
  * @Email hellovie@foxmail.com
  * @createTime 2023/4/19 12:02
  */
+@ApiModel("结果集封装")
 @Data
 public class ResultResponse<T> {
     /** 响应数据 */
+    @ApiModelProperty(value = "响应数据")
     private T data;
 
     /** 响应描述 */
+    @ApiModelProperty(value = "响应描述")
     private String message;
 
     /** 响应状态码 */
+    @ApiModelProperty(value = "响应状态码")
     private int code;
 
     /** 接口调用时间 */
+    @ApiModelProperty(value = "接口调用时间")
     private String timestamp;
 
     /**
@@ -44,8 +52,8 @@ public class ResultResponse<T> {
      */
     public static <T> ResultResponse<T> success(T data) {
         ResultResponse<T> result = new ResultResponse<>();
-        result.setCode(CommonExceptionType.SUCCESS.getCode());
-        result.setMessage(CommonExceptionType.SUCCESS.getMessage());
+        result.setCode(SUCCESS.getCode());
+        result.setMessage(SUCCESS.getMessage());
         result.setData(data);
         return result;
     }

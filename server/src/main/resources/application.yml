@@ -17,6 +17,11 @@ spring:
   jpa:
     generate-ddl: false
     database: mysql
+  # swagger3和spring版本冲突
+  # Failed to start bean 'documentationPluginsBootstrapper'; nested exception is java.lang.NullPointerException
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
   # flyway
   flyway:

@@ -24,3 +24,29 @@ spring:
 # 日志配置文件
 logging:
   config: classpath:log4j2-boot-dev.xml
+
+# 开发环境开启swagger
+swagger:
+  # 是否开启swagger
+  enabled: true
+  # 接口调试地址
+  try-host: http://192.168.31.207:${server.port}
+  api-info:
+    # 作者名
+    name: Hellovie
+    # 作者网站
+    url: https://hellovie.github.io
+    # 作者邮箱
+    email: hellovie@foxmail.com
+    # 项目名
+    title: 在线文章阅读平台
+    # 项目描述
+    description: 在线文章阅读平台API文档！
+    # 项目版本
+    version: 1.0.0
+    # 服务条款网址
+    terms-of-service-url: https://hellovie.github.io
+    # 许可
+    license: Apache 2.0
+    # 许可链接
+    license-url: http://www.apache.org/licenses/LICENSE-2.0
