@@ -1,14 +1,15 @@
 package io.github.hellovie.user.domain.enums;
 
 /**
- * 系统已存在的角色实例
+ * 系统已存在的角色实例. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/22 13:14
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/22 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 public class RolesConstant {
-    private RolesConstant() {}
+    private RolesConstant() { }
 
     /** 普通用户 */
     public static final String ROLE_USER_KEY = "ROLE_USER";

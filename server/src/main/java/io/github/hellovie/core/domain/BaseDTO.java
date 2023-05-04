@@ -5,11 +5,12 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * Data Transfer Object基类
+ * Data Transfer Object 基类. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/20 17:04
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/20 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Data
 public abstract class BaseDTO {

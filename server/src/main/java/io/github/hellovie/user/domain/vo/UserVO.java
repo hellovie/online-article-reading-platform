@@ -9,11 +9,12 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 去除敏感数据的用户VO
+ * 去除敏感数据的用户 VO. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/20 20:36
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/20 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @ApiModel("用户账号信息视图")
 @Data
@@ -26,12 +27,12 @@ public class UserVO extends BaseVO {
     @ApiModelProperty(value = "用户昵称")
     private String nickname;
 
-    /** 最后登录IP */
+    /** 最后登录 IP */
     @ApiModelProperty(value = "最后登录IP")
     private String lastLoginIp;
 
     /** 最后登录时间 */
     @ApiModelProperty(value = "最后登录时间")
-    @JsonFormat(timezone = "GMT+8", pattern= "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastLoginTime;
 }

@@ -12,11 +12,12 @@ import javax.persistence.MappedSuperclass;
 import java.util.Date;
 
 /**
- * Entity基类
+ * Entity 基类. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/20 17:04
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/20 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Data
 @MappedSuperclass

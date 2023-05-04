@@ -35,11 +35,12 @@ import static io.github.hellovie.user.domain.enums.UserExceptionType.*;
 import static io.github.hellovie.user.domain.enums.UserStatus.*;
 
 /**
- * 用户服务实现类
+ * 用户服务实现类. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/20 19:57
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/20 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Service("userServiceImpl")
 @Log4j2
@@ -52,9 +53,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * 获取当前的访问用户
+     * 获取当前的访问用户.
      *
-     * @return 用户DTO
+     * @return 用户 DTO.
      */
     @Override
     public UserDTO getCurrentUser() {
@@ -77,17 +78,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRoleKey())));
 
         CustomUser customUser = new CustomUser(user.getUsername(), user.getPassword(), authorities);
-        customUser.setLocked(user.getLocked())
-                .setEnabled(user.getEnabled());
+        customUser.setLocked(user.getLocked()).setEnabled(user.getEnabled());
         return customUser;
     }
 
     /**
-     * 登录账号
+     * 登录账号.
      *
-     * @param request 用户登录所需信息
-     * @param ip      访问的IP地址
-     * @return (" user " : 用户信息), (" token " : token令牌)
+     * @param request 用户登录所需信息.
+     * @param ip      访问的 IP 地址.
+     * @return (" user " : 用户信息), ("token": token 令牌)
      */
     @Override
     public Map<String, Object> login(LoginRequest request, String ip) {
@@ -111,11 +111,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     /**
-     * 注册账号(普通用户)
+     * 注册账号 (普通用户).
      *
-     * @param request 注册用户所需信息
-     * @param ip      访问的IP地址
-     * @return (" user " : 用户信息), (" token " : token令牌)
+     * @param request 注册用户所需信息.
+     * @param ip      访问的 IP 地址.
+     * @return (" user " : 用户信息), ("token": token 令牌)
      */
     @Override
     public Map<String, Object> register(RegisterRequest request, String ip) {
@@ -131,11 +131,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         // 注册用户，设置最后登录IP和最后登录时间
         User user = new User();
-        user.setNickname(username)
-                .setUsername(username)
-                .setPassword(password)
-                .setLastLoginTime(new Date())
-                .setLastLoginIp(ip);
+        user.setNickname(username).setUsername(username).setPassword(password).setLastLoginTime(new Date()).setLastLoginIp(ip);
 
         // 绑定普通用户角色身份
         ArrayList<Role> roles = new ArrayList<>();
@@ -153,17 +149,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     /**
-     * 设置用户状态(启用/禁用，锁定/解锁)
-     * 自己无法更改自己的状态。
+     * 设置用户状态, 自己无法更改自己的状态. (启用/禁用, 锁定/解锁)
      *
-     * @param request 要修改的用户ID和设置的状态
+     * @param request 要修改的用户 ID 和设置的状态.
      */
     @Override
     public void changeUserStatus(UserStatusRequest request) {
         UserDTO currentUser = getCurrentUser();
-        // 不允许用户修改自己的状态
-        if (request.getUserId() == null || currentUser.getId() == null ||
-            request.getUserId().equals(currentUser.getId())) {
+        // 不允许用户修改自己的状态.
+        if (request.getUserId() == null || currentUser.getId() == null || request.getUserId().equals(currentUser.getId())) {
             throw new ForbiddenException(NO_PERMISSION);
         }
 
@@ -175,23 +169,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         highStatus.add(DISABLE.name());
 
         String status = request.getStatus();
-        // 查询用户是否存在，存在则开始设置状态
+        // 查询用户是否存在, 存在则开始设置状态.
         User changeUser = checkUserById(request.getUserId());
 
-        // 低权限(锁定和解锁)，直接进行设置
+        // 低权限 (锁定和解锁), 直接进行设置.
         if (lowStatus.contains(status)) {
             changeUser.setLocked(LOCK.name().equals(status));
             userRepository.save(changeUser);
             return;
         }
 
-        // 高权限(禁用和启用)
-        // 当前请求的用户是否为超级管理员，只有超级管理员才能启用或禁用用户。
+        // 高权限 (禁用和启用)
+        // 当前请求的用户是否为超级管理员, 只有超级管理员才能启用或禁用用户.
         List<String> rolesKey = new ArrayList<>();
         currentUser.getRoles().forEach(role -> {
             rolesKey.add(role.getRoleKey());
         });
-        // 属于超级管理员同时是执行启用或禁用用户，才能执行操作。
+        // 属于超级管理员同时是执行启用或禁用用户, 才能执行操作.
         boolean isPermission = rolesKey.contains(ROLE_SUPER_ADMIN_KEY) && highStatus.contains(status);
         if (isPermission) {
             changeUser.setEnabled(ENABLE.name().equals(status));
@@ -203,11 +197,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     /**
-     * 判断用户是否存在，不存在则抛出异常
+     * 判断用户是否存在, 不存在则抛出异常.
      *
-     * @param username 用户名
-     * @return 用户信息
-     * @throw DatabaseFieldNotFoundException 用户不存在
+     * @param username 用户名.
+     * @return 用户信息.
+     * @throw DatabaseFieldNotFoundException 用户不存在.
      */
     private User checkUserByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
@@ -218,11 +212,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     /**
-     * 判断用户是否存在，不存在则抛出异常
+     * 判断用户是否存在, 不存在则抛出异常.
      *
      * @param id ID
-     * @return 用户信息
-     * @throw DatabaseFieldNotFoundException 用户不存在
+     * @return 用户信息.
+     * @throw DatabaseFieldNotFoundException 用户不存在.
      */
     private User checkUserById(String id) {
         Optional<User> user = userRepository.findById(id);

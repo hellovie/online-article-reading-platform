@@ -10,22 +10,23 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * 全局业务异常捕获处理，最后再进行处理。
+ * 全局业务异常捕获处理, 处理完第三方异常后才开始处理. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/23 16:55
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/23 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Order(2)
 @RestControllerAdvice
 @Slf4j
 public class BusinessExceptionHandler {
     /**
-     * Http Code: 403(无权限访问！)
-     * 用户角色无权限访问异常
+     * Http Code: 403 (无权限访问.)
+     * <p>用户角色无权限访问异常.</p>
      *
-     * @param ex 异常信息
-     * @return ResultResponse(code + message)
+     * @param ex 异常信息.
+     * @return ResultResponse (code + message).
      */
     @ExceptionHandler({ForbiddenException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
@@ -34,11 +35,11 @@ public class BusinessExceptionHandler {
     }
 
     /**
-     * Http Code: 409(请求与服务器端目标资源的当前状态相冲突)
-     * 1. 数据库字段值冲突异常
+     * Http Code: 409 (请求与服务器端目标资源的当前状态相冲突.)
+     * <p>1. 数据库字段值冲突异常.</p>
      *
-     * @param ex 异常信息
-     * @return ResultResponse(code + message)
+     * @param ex 异常信息.
+     * @return ResultResponse (code + message).
      */
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler({
@@ -49,11 +50,11 @@ public class BusinessExceptionHandler {
     }
 
     /**
-     * Http Code: 404(服务器无法找到所请求的资源)
-     * 1. 数据库字段值不存在异常
+     * Http Code: 404 (服务器无法找到所请求的资源.)
+     * <p>1. 数据库字段值不存在异常.</p>
      *
-     * @param ex 异常信息
-     * @return ResultResponse(code + message)
+     * @param ex 异常信息.
+     * @return ResultResponse (code + message).
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({
@@ -64,11 +65,11 @@ public class BusinessExceptionHandler {
     }
 
     /**
-     * Http Code: 422(服务器理解请求实体的内容类型，并且请求实体的语法是正确的，但是服务器无法处理所包含的指令)
-     * 1. 数据库字段值验证异常
+     * Http Code: 422(服务器理解请求实体的内容类型, 并且请求实体的语法是正确的, 但是服务器无法处理所包含的指令.)
+     * <p>1. 数据库字段值验证异常.</p>
      *
-     * @param ex 异常信息
-     * @return ResultResponse(code + message)
+     * @param ex 异常信息.
+     * @return ResultResponse (code + message).
      */
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler({
@@ -79,12 +80,12 @@ public class BusinessExceptionHandler {
     }
 
     /**
-     * Http Code: 400(请求错误)
-     * BusinessException是所有业务异常的父类，放置到最后进行捕获。
-     * 1. 业务异常
+     * Http Code: 400 (请求错误.)
+     * <p>BusinessException 是所有业务异常的父类, 放置到最后进行捕获.</p>
+     * <p>1. 业务异常.</p>
      *
-     * @param ex 异常信息
-     * @return ResultResponse(code + message)
+     * @param ex 异常信息.
+     * @return ResultResponse (code + message).
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BusinessException.class)
@@ -93,12 +94,11 @@ public class BusinessExceptionHandler {
     }
 
     /**
-     * 警告异常
-     * 系统异常统一处理，根据异常类的IExceptionType进行返回。
-     * 打印Warn级别日志
+     * 警告异常, 系统异常统一处理. 根据异常类的 IExceptionType 进行返回.
+     * <p>打印 Warn 级别日志.</p>
      *
-     * @param ex
-     * @return IExceptionType(code + message)
+     * @param ex BusinessException 及其子类.
+     * @return IExceptionType (code + message).
      */
     private ResultResponse warningException(BusinessException ex) {
         log.warn("[#" + ex.getCode() + "]{ " + ex.getMessage() + " }");

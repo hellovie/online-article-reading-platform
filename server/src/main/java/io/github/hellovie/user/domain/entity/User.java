@@ -8,11 +8,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 用户实体
+ * 用户实体. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/20 19:46
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/20 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Data
 @Entity(name = "User")
@@ -27,13 +28,13 @@ public class User extends BaseEntity {
     /** 密码 */
     private String password;
 
-    /** 是否锁定(true: 锁定) */
+    /** 是否锁定 (true: 锁定) */
     private Boolean locked = false;
 
-    /** 是否启用(true: 启用) */
+    /** 是否启用 (true: 启用) */
     private Boolean enabled = true;
 
-    /** 最后登录IP */
+    /** 最后登录 IP */
     private String lastLoginIp;
 
     /** 最后登录时间 */

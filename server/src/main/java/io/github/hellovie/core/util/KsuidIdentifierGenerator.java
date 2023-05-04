@@ -8,11 +8,12 @@ import org.hibernate.id.IdentifierGenerator;
 import java.io.Serializable;
 
 /**
- * ksuid生成器
+ * ksuid 生成器. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2022/12/29 19:50
+ * @author hellovie <br>
+ * @version 1.0.0 2022/12/29 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 public class KsuidIdentifierGenerator implements IdentifierGenerator {
     @Override

@@ -9,11 +9,12 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 /**
- * 设置用户状态的请求(启用/禁用，锁定/解锁)
+ * 设置用户状态的请求 (启用/禁用, 锁定/解锁). <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/22 22:38
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/22 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @ApiModel("用户状态更改请求")
 @Data

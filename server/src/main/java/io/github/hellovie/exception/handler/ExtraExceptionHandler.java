@@ -21,23 +21,24 @@ import java.util.List;
 import static io.github.hellovie.exception.CommonExceptionType.*;
 
 /**
- * 全局额外异常捕获处理，最后再进行处理。
- * 额外异常：非自己定义的第三方异常
+ * 全局额外异常捕获处理, 最先开始处理. <br>
+ * 额外异常: 非自己定义的第三方异常. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/23 17:01
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/23 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Order(1)
 @RestControllerAdvice
 @Slf4j
 public class ExtraExceptionHandler {
     /**
-     * Http Code: 403(无权限访问！)
-     * 无权限访问异常 spring security授权异常处理
+     * Http Code: 403(无权限访问.)
+     * <p>无权限访问异常 spring security 授权异常处理.</p>
      *
-     * @param ex 异常信息
-     * @return ResultResponse(code + message)
+     * @param ex 异常信息.
+     * @return ResultResponse (code + message).
      */
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
@@ -46,19 +47,19 @@ public class ExtraExceptionHandler {
     }
 
     /**
-     * Http Code: 400(请求错误)
-     * 1. 请求数据参数不符合要求
-     * 2. 请求方法有误
-     * 3. 未知Host异常
+     * Http Code: 400(请求错误.)
+     * <p>1. 请求数据参数不符合要求.</p>
+     * <p>2. 请求方法有误.</p>
+     * <p>3. 未知 Host 异常.</p>
      *
-     * @param ex 异常信息
-     * @return ResultResponse(code + message)
+     * @param ex 异常信息.
+     * @return ResultResponse (code + message).
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
-            HttpMessageNotReadableException.class, // HTTP消息不可读异常
-            HttpRequestMethodNotSupportedException.class, // HTTP请求方法不支持异常
-            UnknownHostException.class // 未知Host异常
+            HttpMessageNotReadableException.class, // HTTP 消息不可读异常
+            HttpRequestMethodNotSupportedException.class, // HTTP 请求方法不支持异常
+            UnknownHostException.class // 未知 Host 异常
     })
     public ResultResponse HTTPExceptionHandler(Exception ex) {
         if (ex.getClass() == HttpMessageNotReadableException.class) {
@@ -72,22 +73,22 @@ public class ExtraExceptionHandler {
     }
 
     /**
-     * Http Code: 400(请求错误)
-     * 请求数据校验失败
+     * Http Code: 400(请求错误.)
+     * <p>请求数据校验失败.</p>
      *
-     * @param ex 异常信息
-     * @return ResultResponse(code + message)
+     * @param ex 异常信息.
+     * @return ResultResponse (code + message).
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResultResponse validationExceptionHandler(MethodArgumentNotValidException ex) {
 
         BindingResult exceptions = ex.getBindingResult();
-        // 判断异常中是否有错误信息，如果存在就使用异常中的消息，否则使用默认消息
+        // 判断异常中是否有错误信息, 如果存在就使用异常中的消息, 否则使用默认消息.
         if (exceptions.hasErrors()) {
             List<ObjectError> errors = exceptions.getAllErrors();
             if (!errors.isEmpty()) {
-                // 这里列出了全部错误参数，按正常逻辑，只需要第一条错误即可
+                // 这里列出了全部错误参数, 按正常逻辑, 只需要第一条错误即可.
                 FieldError fieldError = (FieldError) errors.get(0);
                 return ResultResponse.fail(VALIDATION_FAILED.getCode(), fieldError.getDefaultMessage());
             }

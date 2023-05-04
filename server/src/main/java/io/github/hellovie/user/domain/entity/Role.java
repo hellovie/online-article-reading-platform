@@ -7,11 +7,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
- * 角色实体
+ * 角色实体. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/20 20:12
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/20 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Data
 @Entity(name = "Role")

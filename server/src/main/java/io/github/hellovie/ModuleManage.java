@@ -3,19 +3,18 @@ package io.github.hellovie;
 import io.github.hellovie.exception.CommonExceptionType;
 import io.github.hellovie.exception.IExceptionType;
 import io.github.hellovie.user.domain.enums.UserExceptionType;
-import lombok.AllArgsConstructor;
 
 /**
- * 模块管理
+ * 模块管理. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/19 13:11
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/19 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 public enum ModuleManage {
     /** 通用模块 */
-    COMMON_MODULE(10, CommonExceptionType.class),
-    USER_MODULE(11, UserExceptionType.class),
+    COMMON_MODULE(10, CommonExceptionType.class), USER_MODULE(11, UserExceptionType.class),
 
     ;
 
@@ -30,18 +29,18 @@ public enum ModuleManage {
     }
 
     /**
-     * 获取模块编号
+     * 获取模块编号.
      *
-     * @return 模块编号
+     * @return 模块编号.
      */
     public final int num() {
         return this.num * 1000;
     }
 
     /**
-     * 获取模块对应异常枚举类
+     * 获取模块对应异常枚举类.
      *
-     * @return 异常枚举类
+     * @return 异常枚举类.
      */
     public final Class typeClass() {
         return this.typeClass;

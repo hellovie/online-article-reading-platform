@@ -16,16 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Swagger配置类
+ * Swagger3 配置类. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/26 13:49
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/26 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Configuration
 @EnableOpenApi
 public class SwaggerConfig {
-    /** 用于读取配置文件application.properties中swagger属性是否开启 */
+    /** 用于读取配置文件 application.properties 中 swagger 属性是否开启. */
     @Value("${swagger.enabled}")
     private Boolean swaggerEnabled;
 
@@ -69,6 +70,11 @@ public class SwaggerConfig {
     @Value("${swagger.api-info.license-url}")
     private String licenseUrl;
 
+    /**
+     * 配置默认 Docket.
+     *
+     * @return Swagger3 Docket.
+     */
     @Bean
     public Docket docket() {
         return new Docket(DocumentationType.OAS_30).apiInfo(apiInfo())
@@ -77,43 +83,56 @@ public class SwaggerConfig {
                 // 是否开启swagger
                 .enable(swaggerEnabled).select()
                 // 扫描所有有注解的api，用这种方式更灵活
-                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-                .build()
-                .securitySchemes(securitySchemes())
-                .securityContexts(securityContexts());
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class)).build().securitySchemes(securitySchemes()).securityContexts(securityContexts());
     }
 
+    /**
+     * 配置用户模块 Docket.
+     *
+     * @return Swagger3 Docket.
+     */
     @Bean
     public Docket userModuleDocket() {
-        return new Docket(DocumentationType.OAS_30)
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.ant("/users/**"))
-                .build()
-                .groupName("用户模块")
-                .pathMapping("/");
+        return new Docket(DocumentationType.OAS_30).apiInfo(apiInfo()).select().apis(RequestHandlerSelectors.any()).paths(PathSelectors.ant("/users/**")).build().groupName("用户模块").pathMapping("/");
     }
 
+    /**
+     * 配置网站的基本信息.
+     *
+     * @return Swagger3 ApiInfo.
+     */
     private ApiInfo apiInfo() {
         Contact contact = new Contact(name, url, email);
         return new ApiInfo(title, description, version, termsOfServiceUrl, contact, license, licenseUrl, new ArrayList());
     }
 
-    /** 认证的安全上下文 */
+    /**
+     * 认证的安全上下文.
+     *
+     * @return 安全方案 SecurityScheme.
+     */
     private List<SecurityScheme> securitySchemes() {
         List<SecurityScheme> securitySchemes = new ArrayList<>();
         securitySchemes.add(new ApiKey("Authorization", "Authorization", "header"));
         return securitySchemes;
     }
 
-    /** 授权信息全局应用 */
+    /**
+     * 授权信息全局应用.
+     *
+     * @return SecurityContext.
+     */
     private List<SecurityContext> securityContexts() {
         List<SecurityContext> securityContexts = new ArrayList<>();
         securityContexts.add(SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.any()).build());
         return securityContexts;
     }
 
+    /**
+     * 默认身份验证 Authorization token.
+     *
+     * @return SecurityReference.
+     */
     private List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];

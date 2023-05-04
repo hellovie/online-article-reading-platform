@@ -4,17 +4,18 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
- * 通用校验器，对用户注入的校验器进行统一处理。
+ * 枚举校验器, 处理具有枚举逻辑的字符串. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/23 10:22
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/23 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 public class EnumValidator implements ConstraintValidator<EnumValid, Object> {
-    /** 枚举类(枚举枚举类变量名) */
+    /** 枚举类 (枚举枚举类变量名) */
     private Class<? extends Enum> enumClass;
 
-    /** 枚举值(枚举的具体值，可以是自定义的字符串数组) */
+    /** 枚举值 (枚举的具体值, 可以是自定义的字符串数组) */
     private String[] enumValue;
 
     @Override

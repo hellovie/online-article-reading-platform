@@ -21,42 +21,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * spring security配置类
+ * spring security 配置类. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/19 14:03
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/19 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        prePostEnabled = true,
-        securedEnabled = true,
-        jsr250Enabled = true
-)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
-    @Resource(name="userServiceImpl")
+    @Resource(name = "userServiceImpl")
     private UserDetailsService userDetailsService;
 
     /** 放行接口 */
     private static final String[] ALLOWED_INTERFACES = {
-            "/users/login",
-            "/users/register",
-            // swagger放行
-            "/swagger-ui.html",
-            "/swagger-ui/*",
-            "/swagger-resources/**",
-            "/v2/api-docs",
-            "/v3/api-docs",
-            "/webjars/**"};
+            "/users/login", "/users/register",
+            // swagger 放行
+            "/swagger-ui.html", "/swagger-ui/*", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs", "/webjars/**"
+    };
 
-    /** JWT加密密钥 */
+    /** JWT 加密密钥 */
     public static final String SECRET = "HellovieSecretKey";
 
-    /** JWT有效时长10天 */
+    /** JWT 有效时长 10 天 */
     public static final long EXPIRATION_TIME = 864000000;
 
-    /** JWT token前缀 */
+    /** JWT token 前缀 */
     public static final String TOKEN_PREFIX = "Bearer ";
 
     /** JWT Header key */
@@ -67,10 +59,10 @@ public class SecurityConfig {
     private UserAuthenticationEntryPoint authenticationEntryPoint;
 
     /**
-     * DelegatingPasswordEncoder可拓展的加密方式。
-     * 默认bcrypt(采用SHA-256 + 随机盐 + 密钥对密码进行加密)
+     * DelegatingPasswordEncoder 可拓展的加密方式.
+     * <p>默认bcrypt (采用 SHA-256 + 随机盐 + 密钥对密码进行加密).</p>
      *
-     * @return BCryptPasswordEncoder
+     * @return BCryptPasswordEncoder.
      */
     @Bean(name = "passwordEncoder")
     public static PasswordEncoder passwordEncoder() {
@@ -82,10 +74,10 @@ public class SecurityConfig {
     }
 
     /**
-     * 获取AuthenticationManager(认证管理器)，登录时认证使用。
+     * 获取 AuthenticationManager (认证管理器), 登录时认证使用.
      *
-     * @param authenticationConfiguration
-     * @return AuthenticationManager
+     * @param authenticationConfiguration AuthenticationConfiguration.
+     * @return AuthenticationManager.
      * @throws Exception
      */
     @Bean(name = "authenticationManagerBean")
@@ -94,31 +86,28 @@ public class SecurityConfig {
     }
 
     /**
-     * spring-security配置
+     * spring-security 配置.
      *
-     * @param http
-     * @return
+     * @param http HttpSecurity.
+     * @return SecurityFilterChain.
      * @throws Exception
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManagerBean) throws Exception {
         return http
-                // 基于token，不需要csrf
+                // 基于 token, 不需要 csrf.
                 .csrf().disable()
-                // 开启跨域以便前端调用接口
+                // 开启跨域以便前端调用接口.
                 .cors().and().authorizeRequests()
-                // 放行接口
+                // 放行接口.
                 .antMatchers(ALLOWED_INTERFACES).permitAll()
-                // 其它所有接口需要认证才能访问
+                // 其它所有接口需要认证才能访问.
                 .anyRequest().authenticated().and()
-                // 认证拦截器
+                // 认证拦截器.
                 .addFilter(new JwtAuthorizationFilter(authenticationManagerBean, userDetailsService))
-                // 配置异常处理
-                .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .and()
-                // 基于token，不需要session
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .build();
+                // 配置异常处理.
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
+                // 基于 token, 不需要 session.
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().build();
     }
 }

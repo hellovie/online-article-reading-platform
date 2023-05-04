@@ -8,11 +8,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 基于spring-boot-starter-validation的枚举校验注解
+ * 基于 spring-boot-starter-validation 的枚举校验注解. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/23 9:29
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/23 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Constraint(validatedBy = EnumValidator.class)
 @Target(ElementType.FIELD)
@@ -20,10 +21,10 @@ import java.lang.annotation.Target;
 public @interface EnumValid {
     String message() default "{io.github.hellovie.core.validation.EnumValid.message}";
 
-    /** 枚举类(枚举枚举类变量名) */
+    /** 枚举类 (枚举枚举类变量名) */
     Class<? extends Enum<?>> enumClass();
 
-    /** 枚举值(枚举的具体值，可以是自定义的字符串数组) */
+    /** 枚举值 (枚举的具体值, 可以是自定义的字符串数组) */
     String[] enumValue() default {};
 
     Class<?>[] groups() default {};

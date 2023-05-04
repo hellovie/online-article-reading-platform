@@ -6,11 +6,12 @@ import io.github.hellovie.user.domain.vo.LoginVO;
 import org.mapstruct.Mapper;
 
 /**
- * 用户模块Java Bean映射器
+ * 用户模块 Java Bean 映射器, mapstruct实现. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/20 20:02
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/20 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Mapper(componentModel = "spring")
 public interface UserMapper {

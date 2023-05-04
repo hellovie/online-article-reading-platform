@@ -2,16 +2,14 @@ package io.github.hellovie;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ComponentScans;
 
 /**
- * 启动类
+ * 启动类. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/18 21:59
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/18 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @SpringBootApplication
 public class Main {

@@ -4,20 +4,21 @@ import io.github.hellovie.ModuleManage;
 import io.github.hellovie.exception.IExceptionType;
 
 /**
- * 用户模块异常
+ * 用户模块异常. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/20 23:25
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/20 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 public enum UserExceptionType implements IExceptionType {
-    /** 用户已存在 */
+    /** 用户已存在. */
     USER_EXIST(1, "用户已存在！"),
-    /** 用户不存在 */
+    /** 用户不存在. */
     USER_NOT_FOUND(2, "用户不存在！"),
-    /** 账号或密码错误 */
+    /** 账号或密码错误. */
     LOGIN_FAILED(3, "账号或密码错误！"),
-    /** 用户权限不足 */
+    /** 用户权限不足. */
     NO_PERMISSION(4, "用户权限不足！"),
 
     ;
@@ -33,9 +34,9 @@ public enum UserExceptionType implements IExceptionType {
     }
 
     /**
-     * 获取状态码
+     * 获取异常状态码.
      *
-     * @return 状态码
+     * @return 异常状态码.
      */
     @Override
     public int getCode() {
@@ -43,9 +44,9 @@ public enum UserExceptionType implements IExceptionType {
     }
 
     /**
-     * 获取提示信息
+     * 获取异常信息.
      *
-     * @return 提示信息
+     * @return 异常信息.
      */
     @Override
     public String getMessage() {

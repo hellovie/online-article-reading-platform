@@ -1,6 +1,5 @@
 package io.github.hellovie.security;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,15 +8,16 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 登录账号所需要的用户信息域
+ * 登录账号所需要的用户信息域. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/19 15:11
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/19 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Data
 public class CustomUser implements UserDetails {
-    /** 用户名*/
+    /** 用户名 */
     private String username;
     /** 密码 */
     private String password;

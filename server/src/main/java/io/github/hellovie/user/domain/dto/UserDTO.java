@@ -8,11 +8,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 去除敏感数据的用户DTO
+ * 去除敏感数据的用户 DTO. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/20 21:24
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/20 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Data
 public class UserDTO extends BaseDTO {
@@ -22,13 +23,13 @@ public class UserDTO extends BaseDTO {
     /** 用户昵称 */
     private String nickname;
 
-    /** 是否锁定(true: 锁定) */
+    /** 是否锁定 (true: 锁定) */
     private Boolean locked;
 
-    /** 是否启用(true: 启用) */
+    /** 是否启用 (true: 启用) */
     private Boolean enabled;
 
-    /** 最后登录IP */
+    /** 最后登录 IP */
     private String lastLoginIp;
 
     /** 最后登录时间 */

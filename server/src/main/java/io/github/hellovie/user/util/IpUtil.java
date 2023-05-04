@@ -7,20 +7,21 @@ import java.net.UnknownHostException;
 import static io.github.hellovie.exception.CommonExceptionType.UNKNOWN_HOST;
 
 /**
- * 获取请求的IP地址
+ * 获取请求的IP地址. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/22 13:43
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/22 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 public class IpUtil {
-    private IpUtil() {}
+    private IpUtil() { }
 
     /**
-     * 获取请求中的IP地址
+     * 获取请求中的 IP 地址.
      *
-     * @param request 请求
-     * @return IP地址
+     * @param request 请求.
+     * @return IP 地址.
      */
     public static String getIpAddr(HttpServletRequest request) {
         String ipAddress = null;
@@ -35,7 +36,7 @@ public class IpUtil {
             if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
                 ipAddress = request.getRemoteAddr();
                 if ("127.0.0.1".equals(ipAddress)) {
-                    // 根据网卡取本机配置的IP
+                    // 根据网卡取本机配置的 IP.
                     InetAddress inet = null;
                     try {
                         inet = InetAddress.getLocalHost();
@@ -45,7 +46,7 @@ public class IpUtil {
                     ipAddress = inet.getHostAddress();
                 }
             }
-            // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
+            // 对于通过多个代理的情况, 第一个 IP 为客户端真实 IP, 多个IP按照 ',' 分割.
             // "***.***.***.***".length()
             if (ipAddress != null && ipAddress.length() > 15) {
                 // = 15
@@ -54,7 +55,7 @@ public class IpUtil {
                 }
             }
         } catch (Exception e) {
-            ipAddress="";
+            ipAddress = "";
         }
 
         return ipAddress;

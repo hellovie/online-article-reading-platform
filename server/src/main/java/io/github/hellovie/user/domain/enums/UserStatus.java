@@ -1,11 +1,12 @@
 package io.github.hellovie.user.domain.enums;
 
 /**
- * 用户状态(启用/禁用，锁定/解锁)
+ * 用户状态 (启用/禁用，锁定/解锁). <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/22 22:26
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/22 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 public enum UserStatus {
     /** 锁定 */

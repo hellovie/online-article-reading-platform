@@ -20,11 +20,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * JWT认证
+ * Java Web Token 认证. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/19 14:59
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/19 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private UserDetailsService userDetailsService;
@@ -35,7 +36,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     /**
-     * 具体拦截逻辑
+     * 具体拦截逻辑.
      *
      * @param request
      * @param response
@@ -59,10 +60,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     /**
-     * JWT验证，验证成功返回认证信息，认证失败返回null。
+     * JWT 验证, 验证成功返回认证信息, 认证失败返回 null.
      *
-     * @param token token
-     * @return 认证信息
+     * @param token token.
+     * @return 认证信息.
      */
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
         if (token != null) {

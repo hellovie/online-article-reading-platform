@@ -7,11 +7,12 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * View Object基类
+ * View Object 基类. <br>
  *
- * @author hellovie
- * @Email hellovie@foxmail.com
- * @createTime 2023/4/20 17:03
+ * @author hellovie <br>
+ * @version 1.0.0 2023/4/20 <br>
+ * @Email hellovie@foxmail.com <br>
+ * @since JDK 1.8
  */
 @Data
 public abstract class BaseVO {
@@ -21,11 +22,11 @@ public abstract class BaseVO {
 
     /** 创建时间 */
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(timezone = "GMT+8", pattern= "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     protected Date gmtCreate;
 
     /** 更新时间 */
     @ApiModelProperty(value = "更新时间")
-    @JsonFormat(timezone = "GMT+8", pattern= "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     protected Date gmtModified;
 }
