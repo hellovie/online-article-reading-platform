@@ -4,6 +4,7 @@ import { ref, reactive } from 'vue'
 import { loginApi, registerApi } from '@/http/api/user'
 import { useUserAccountStore } from '@/stores/user'
 import Loading from 'vue-loading-overlay'
+import $Toast from '@/main.js'
 
 const userAccountStore = useUserAccountStore()
 const { login } = userAccountStore
@@ -82,7 +83,12 @@ const loginForm = () => {
 }
 const registerForm = () => {
   if (registerUser.password !== registerUser.checkPassword) {
-    alert('两次密码不同！')
+    $Toast.open({
+      message: '两次密码不同！',
+      type: 'info',
+      position: 'top-right',
+      duration: 3000
+    })
   } else {
     const registerSubmitBtn = document.getElementById('register-submit-btn')
     registerSubmitBtn.disabled = true

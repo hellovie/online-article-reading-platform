@@ -1,6 +1,7 @@
 <script setup>
 import router from '@/router/index.js'
 import { useUserAccountStore } from '@/stores/user'
+import $Toast from '@/main.js'
 
 const userAccountStore = useUserAccountStore()
 const { isLogin } = userAccountStore
@@ -14,10 +15,20 @@ const gotoHome = () => {
   router.push('/home')
 }
 const search = () => {
-  alert('搜索文章')
+  $Toast.open({
+    message: '搜索文章功能紧急开发中...',
+    type: 'info',
+    position: 'top-right',
+    duration: 3000
+  })
 }
 const userInfo = () => {
-  alert('欢迎你，' + nickname + '！')
+  $Toast.open({
+    message: '欢迎你，' + nickname + '！用户信息功能紧急开发中...',
+    type: 'info',
+    position: 'top-right',
+    duration: 3000
+  })
 }
 </script>
 
