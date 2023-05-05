@@ -25,7 +25,7 @@ public class UserStatusRequest {
     private String userId;
 
     /** 要设置成的状态 */
-    @ApiModelProperty(value = "用户状态", required = true, example = "有效值只包含“LOCK”、“UNLOCK”、“ENABLE”、“DISABLE”。")
+    @ApiModelProperty(value = "用户状态", required = true, example = "用户状态只包含“LOCK”、“UNLOCK”、“ENABLE”、“DISABLE”！")
     @EnumValid(enumClass = UserStatus.class, message = "无效的用户状态！")
     private String status;
 }
