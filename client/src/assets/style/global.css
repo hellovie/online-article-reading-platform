@@ -1,0 +1,68 @@
+:root {
+  --main-bg-color: #eff0f1;
+  --main-font-color: #0e0e38;
+  --main-shadow-color: rgba(0, 0, 0, 0.1);
+  --main-mask-color: rgba(0,0,0,.2);
+
+  --main-article-font-color: #555555;
+  --main-article-bg-color: #f4f4f4;
+
+  --main-card-bg-color: #fff;
+
+  --header-bg-color: rgba(255, 255, 255, 0.9);
+  --btn-hover-border-color: #0e0e38;
+}
+
+* {
+  margin: 0;
+  font-family: 'JetBrains Mono', -apple-system, 'Helvetica Neue', Helvetica, Arial, 'PingFang SC',
+    'Hiragino Sans GB', 'WenQuanYi Micro Hei', 'Microsoft Yahei', sans-serif;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #fff;
+  border-radius: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(162, 170, 166, 0.7);
+  border-radius: 7px;
+}
+
+/* 单行省略 */
+.singe-line {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  white-space: nowrap;
+}
+
+/* 消除edge浏览器默认密码框带有小眼睛 */
+input[type="password"]::-ms-reveal{
+  display: none;
+}
+input[type="password"]::-ms-clear{
+  display: none;
+}
+input[type="password"]::-o-clear{
+  display: none;
+}
+
+.loading-box {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--main-mask-color);
+}

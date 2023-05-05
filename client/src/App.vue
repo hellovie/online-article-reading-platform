@@ -1,9 +1,10 @@
 <script setup>
-
+import LayoutComponent from './components/LayoutComponent.vue'
 </script>
 
 <template>
-  <router-view/>
+  <LayoutComponent v-if="this.$route.path != '/login'" />
+  <router-view v-else />
 </template>
 
 <style scoped>
