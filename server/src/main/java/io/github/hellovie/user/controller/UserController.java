@@ -6,20 +6,21 @@ import io.github.hellovie.user.domain.request.LoginRequest;
 import io.github.hellovie.user.domain.request.RegisterRequest;
 import io.github.hellovie.user.domain.request.UserStatusRequest;
 import io.github.hellovie.user.domain.vo.LoginVO;
+import io.github.hellovie.user.domain.vo.UserVO;
 import io.github.hellovie.user.mapper.UserMapper;
 import io.github.hellovie.user.service.UserService;
 import io.github.hellovie.user.util.IpUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Map;
 
 import static io.github.hellovie.user.domain.enums.RolesConstant.ROLE_ADMIN_KEY;
@@ -52,7 +53,7 @@ public class UserController {
     @PostMapping("/login")
     public ResultResponse<LoginVO> login(HttpServletRequest httpRequest, @Valid @RequestBody LoginRequest request) {
         Map<String, Object> map = userService.login(request, IpUtil.getIpAddr(httpRequest));
-        LoginVO loginVO = userMapper.toVO((UserDTO) map.get("user"));
+        LoginVO loginVO = userMapper.toLoginVO((UserDTO) map.get("user"));
         loginVO.setToken((String) map.get("token"));
         return ResultResponse.success(loginVO);
     }
@@ -67,7 +68,7 @@ public class UserController {
     @PostMapping("/register")
     public ResultResponse<LoginVO> register(HttpServletRequest httpRequest, @Valid @RequestBody RegisterRequest request) {
         Map<String, Object> map = userService.register(request, IpUtil.getIpAddr(httpRequest));
-        LoginVO loginVO = userMapper.toVO((UserDTO) map.get("user"));
+        LoginVO loginVO = userMapper.toLoginVO((UserDTO) map.get("user"));
         loginVO.setToken((String) map.get("token"));
         return ResultResponse.success(loginVO);
     }
@@ -84,5 +85,17 @@ public class UserController {
     public ResultResponse changeStatus(@Valid @RequestBody UserStatusRequest request) {
         userService.changeUserStatus(request);
         return ResultResponse.success(null);
+    }
+
+    /**
+     * 获取用户账号信息.
+     *
+     * @return 用户个人账号信息.
+     */
+    @ApiOperation("获取用户账号信息")
+    @GetMapping
+    public ResultResponse<UserVO> getUserAccountInfo() {
+        UserVO userVO = userMapper.toVO(userService.getUserAccountInfoByToken());
+        return ResultResponse.success(userVO);
     }
 }

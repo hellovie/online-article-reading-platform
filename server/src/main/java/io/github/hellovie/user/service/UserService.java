@@ -4,6 +4,7 @@ import io.github.hellovie.user.domain.dto.UserDTO;
 import io.github.hellovie.user.domain.request.LoginRequest;
 import io.github.hellovie.user.domain.request.RegisterRequest;
 import io.github.hellovie.user.domain.request.UserStatusRequest;
+import io.github.hellovie.user.domain.vo.UserVO;
 
 import java.util.Map;
 
@@ -47,4 +48,11 @@ public interface UserService {
      * @param request 要修改的用户 ID 和设置的状态.
      */
     void changeUserStatus(UserStatusRequest request);
+
+    /**
+     * 获取用户账号信息 (仅用户个人能够获取).
+     *
+     * @return 用户个人账号信息.
+     */
+    UserDTO getUserAccountInfoByToken();
 }

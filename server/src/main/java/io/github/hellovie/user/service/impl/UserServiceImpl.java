@@ -1,10 +1,16 @@
 package io.github.hellovie.user.service.impl;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import io.github.hellovie.exception.business.DatabaseFieldConflictException;
 import io.github.hellovie.exception.business.DatabaseFieldNotFoundException;
 import io.github.hellovie.exception.business.DatabaseFieldVerifyException;
 import io.github.hellovie.exception.business.ForbiddenException;
 import io.github.hellovie.security.CustomUser;
+import io.github.hellovie.security.SecurityConfig;
 import io.github.hellovie.security.util.TokenUtil;
 import io.github.hellovie.user.domain.dto.UserDTO;
 import io.github.hellovie.user.domain.entity.Role;
@@ -12,6 +18,7 @@ import io.github.hellovie.user.domain.entity.User;
 import io.github.hellovie.user.domain.request.LoginRequest;
 import io.github.hellovie.user.domain.request.RegisterRequest;
 import io.github.hellovie.user.domain.request.UserStatusRequest;
+import io.github.hellovie.user.domain.vo.UserVO;
 import io.github.hellovie.user.mapper.UserMapper;
 import io.github.hellovie.user.repository.UserRepository;
 import io.github.hellovie.user.service.UserService;
@@ -194,6 +201,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         } else {
             throw new ForbiddenException(NO_PERMISSION);
         }
+    }
+
+    /**
+     * 获取用户账号信息 (仅用户个人能够获取).
+     *
+     * @return 用户个人账号信息.
+     */
+    @Override
+    public UserDTO getUserAccountInfoByToken() {
+        return getCurrentUser();
     }
 
     /**

@@ -3,6 +3,7 @@ package io.github.hellovie.user.mapper;
 import io.github.hellovie.user.domain.dto.UserDTO;
 import io.github.hellovie.user.domain.entity.User;
 import io.github.hellovie.user.domain.vo.LoginVO;
+import io.github.hellovie.user.domain.vo.UserVO;
 import org.mapstruct.Mapper;
 
 /**
@@ -15,7 +16,9 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    public UserDTO toDto(User entity);
+    UserDTO toDto(User entity);
 
-    public LoginVO toVO(UserDTO dto);
+    LoginVO toLoginVO(UserDTO dto);
+
+    UserVO toVO(UserDTO dto);
 }
