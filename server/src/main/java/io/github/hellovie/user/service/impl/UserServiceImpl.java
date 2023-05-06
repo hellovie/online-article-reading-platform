@@ -1,24 +1,12 @@
 package io.github.hellovie.user.service.impl;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import io.github.hellovie.exception.business.DatabaseFieldConflictException;
 import io.github.hellovie.exception.business.DatabaseFieldNotFoundException;
-import io.github.hellovie.exception.business.DatabaseFieldVerifyException;
 import io.github.hellovie.exception.business.ForbiddenException;
 import io.github.hellovie.security.CustomUser;
-import io.github.hellovie.security.SecurityConfig;
-import io.github.hellovie.security.util.TokenUtil;
 import io.github.hellovie.user.domain.dto.UserDTO;
 import io.github.hellovie.user.domain.entity.Role;
 import io.github.hellovie.user.domain.entity.User;
-import io.github.hellovie.user.domain.request.LoginRequest;
-import io.github.hellovie.user.domain.request.RegisterRequest;
 import io.github.hellovie.user.domain.request.UserStatusRequest;
-import io.github.hellovie.user.domain.vo.UserVO;
 import io.github.hellovie.user.mapper.UserMapper;
 import io.github.hellovie.user.repository.UserRepository;
 import io.github.hellovie.user.service.UserService;
@@ -30,15 +18,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
 
 import static io.github.hellovie.user.domain.enums.RolesConstant.ROLE_SUPER_ADMIN_KEY;
-import static io.github.hellovie.user.domain.enums.RolesConstant.ROLE_USER_ID;
-import static io.github.hellovie.user.domain.enums.UserExceptionType.*;
+import static io.github.hellovie.user.domain.enums.UserExceptionType.NO_PERMISSION;
+import static io.github.hellovie.user.domain.enums.UserExceptionType.USER_NOT_FOUND;
 import static io.github.hellovie.user.domain.enums.UserStatus.*;
 
 /**
@@ -56,8 +43,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private UserRepository userRepository;
     @Resource
     private UserMapper userMapper;
-    @Resource(name = "passwordEncoder")
-    private PasswordEncoder passwordEncoder;
 
     /**
      * 获取当前的访问用户.
@@ -87,72 +72,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         CustomUser customUser = new CustomUser(user.getUsername(), user.getPassword(), authorities);
         customUser.setLocked(user.getLocked()).setEnabled(user.getEnabled());
         return customUser;
-    }
-
-    /**
-     * 登录账号.
-     *
-     * @param request 用户登录所需信息.
-     * @param ip      访问的 IP 地址.
-     * @return (" user " : 用户信息), ("token": token 令牌)
-     */
-    @Override
-    public Map<String, Object> login(LoginRequest request, String ip) {
-        String username = request.getUsername();
-        String password = request.getPassword();
-        // 验证用户是否存在
-        User user = checkUserByUsername(username);
-        // 校验密码
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new DatabaseFieldVerifyException(LOGIN_FAILED);
-        }
-        // 记录最后登录时间和IP
-        user.setLastLoginTime(new Date()).setLastLoginIp(ip);
-
-        User saveUser = userRepository.save(user);
-
-        HashMap<String, Object> map = new HashMap<>(2);
-        map.put("user", userMapper.toDto(saveUser));
-        map.put("token", TokenUtil.createToken(saveUser.getUsername()));
-        return map;
-    }
-
-    /**
-     * 注册账号 (普通用户).
-     *
-     * @param request 注册用户所需信息.
-     * @param ip      访问的 IP 地址.
-     * @return (" user " : 用户信息), ("token": token 令牌)
-     */
-    @Override
-    public Map<String, Object> register(RegisterRequest request, String ip) {
-        String username = request.getUsername();
-        // 用户存在抛出异常
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        if (userOptional.isPresent()) {
-            throw new DatabaseFieldConflictException(USER_EXIST);
-        }
-
-        // 密文存储
-        String password = passwordEncoder.encode(request.getPassword());
-
-        // 注册用户，设置最后登录IP和最后登录时间
-        User user = new User();
-        user.setNickname(username).setUsername(username).setPassword(password).setLastLoginTime(new Date()).setLastLoginIp(ip);
-
-        // 绑定普通用户角色身份
-        ArrayList<Role> roles = new ArrayList<>();
-        Role role = new Role();
-        role.setId(ROLE_USER_ID);
-        roles.add(role);
-        user.setRoles(roles);
-
-        User saveUser = userRepository.save(user);
-
-        HashMap<String, Object> map = new HashMap<>(2);
-        map.put("user", userMapper.toDto(saveUser));
-        map.put("token", TokenUtil.createToken(saveUser.getUsername()));
-        return map;
     }
 
     /**

@@ -8,23 +8,22 @@ import io.github.hellovie.user.domain.request.UserStatusRequest;
 import io.github.hellovie.user.domain.vo.LoginVO;
 import io.github.hellovie.user.domain.vo.UserVO;
 import io.github.hellovie.user.mapper.UserMapper;
+import io.github.hellovie.user.service.AuthService;
 import io.github.hellovie.user.service.UserService;
 import io.github.hellovie.user.util.IpUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.Map;
 
 import static io.github.hellovie.user.domain.enums.RolesConstant.ROLE_ADMIN_KEY;
 import static io.github.hellovie.user.domain.enums.RolesConstant.ROLE_SUPER_ADMIN_KEY;
+import static io.github.hellovie.user.service.auth.AuthStrategyType.DEFAULT_AUTH_STRATEGY;
 
 /**
  * 用户账户信息Api. <br>
@@ -42,9 +41,11 @@ public class UserController {
     private UserService userService;
     @Resource
     private UserMapper userMapper;
+    @Resource(name = "authServiceImpl")
+    private AuthService authService;
 
     /**
-     * 用户登录.
+     * 用户登录 (默认登录策略, username + password).
      *
      * @param request 登录用户所需的信息.
      * @return 登录用户的信息及 token 令牌.
@@ -52,14 +53,14 @@ public class UserController {
     @ApiOperation("用户登录")
     @PostMapping("/login")
     public ResultResponse<LoginVO> login(HttpServletRequest httpRequest, @Valid @RequestBody LoginRequest request) {
-        Map<String, Object> map = userService.login(request, IpUtil.getIpAddr(httpRequest));
+        Map<String, Object> map = authService.login(DEFAULT_AUTH_STRATEGY, request, IpUtil.getIpAddr(httpRequest));
         LoginVO loginVO = userMapper.toLoginVO((UserDTO) map.get("user"));
         loginVO.setToken((String) map.get("token"));
         return ResultResponse.success(loginVO);
     }
 
     /**
-     * 用户注册.
+     * 用户注册 (默认注册策略, username + password).
      *
      * @param request 注册用户所需的信息.
      * @return 用户信息.
@@ -67,7 +68,7 @@ public class UserController {
     @ApiOperation("用户注册")
     @PostMapping("/register")
     public ResultResponse<LoginVO> register(HttpServletRequest httpRequest, @Valid @RequestBody RegisterRequest request) {
-        Map<String, Object> map = userService.register(request, IpUtil.getIpAddr(httpRequest));
+        Map<String, Object> map = authService.register(DEFAULT_AUTH_STRATEGY, request, IpUtil.getIpAddr(httpRequest));
         LoginVO loginVO = userMapper.toLoginVO((UserDTO) map.get("user"));
         loginVO.setToken((String) map.get("token"));
         return ResultResponse.success(loginVO);

@@ -23,6 +23,8 @@ public enum CommonExceptionType implements IExceptionType {
     HTTP_REQUEST_METHOD_NOT_SUPPORT(4, "无法解析请求方法！"),
     /** 未知 Host 异常. */
     UNKNOWN_HOST(5, "无法识别主机！"),
+    /** 策略类型与策略组件无法映射. */
+    STRATEGY_TYPE_NOT_MAPPER_STRATEGY_COMPONENT(5, "策略类型与策略组件无法映射！"),
     /** 未知错误. */
     UNKNOWN_EXCEPTION(999, "服务器繁忙，请稍后再试！");
 
