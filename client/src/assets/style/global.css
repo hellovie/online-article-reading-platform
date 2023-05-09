@@ -1,16 +1,27 @@
+@import "clear.css";
+
 :root {
-  --main-bg-color: #eff0f1;
-  --main-font-color: #0e0e38;
-  --main-shadow-color: rgba(0, 0, 0, 0.1);
-  --main-mask-color: rgba(0,0,0,.2);
+  /* SVG 图标边框颜色 */
+  --icon-border--color: #322e63;
+  /* SVG 图标主要颜色 */
+  --icon-main--color: #3b7d90;
 
-  --main-article-font-color: #555555;
-  --main-article-bg-color: #f4f4f4;
-
-  --main-card-bg-color: #fff;
-
-  --header-bg-color: rgba(255, 255, 255, 0.9);
-  --btn-hover-border-color: #0e0e38;
+  /** 网站主题颜色 */
+  --main-primary--color: #3b7d90;
+  --main-primary-hover--color: #3b7e90cd;
+  /** 网站基础文字颜色, 例如导航栏字体 */
+  --main-font-active--color: #0e0e38;
+  --main-font-inactive--color: #8c92a4;
+  /** 网站背景颜色 */
+  --main-bg--color: rgba(240, 255, 255, 0.6);
+  /** 承载内容的卡片背景颜色 */
+  --main-card-bg--color: #fff;
+  /** 分割线颜色 */
+  --main-split-line--color: #F0F0F0;
+  /** 提示框颜色 */
+  --main-tips-border--color: #e4e7ed;
+  --main-tips-font--color: #606266;
+  --main-tips-bg--color: #fff;
 }
 
 * {
@@ -64,5 +75,5 @@ input[type="password"]::-o-clear{
   justify-content: center;
   width: 100%;
   height: 100%;
-  background: var(--main-mask-color);
+  background: rgba(0,0,0,.2);
 }
