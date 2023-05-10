@@ -2,6 +2,10 @@
 import { ref, reactive } from 'vue'
 import EivInput from '@/components/custom/EivInput.vue'
 import $Toast from '@/main.js'
+import { registerApi } from '@/http/api/user'
+import { useUserStore } from '@/stores/user'
+import Loading from 'vue-loading-overlay'
+const { login } = useUserStore()
 
 const registerBy = ref('username')
 // 切换不同方式的注册页面
@@ -51,16 +55,6 @@ const registerFormByUsername = reactive({
 const confirmPassword = ref('')
 // 验证表单数据
 const validator = (form, rules) => {
-  if (confirmPassword.value !== '' && form.password !== confirmPassword.value) {
-    $Toast.open({
-      message: '输入的两次密码不相同!',
-      type: 'warning',
-      position: 'top-right',
-      duration: 3000
-    })
-    confirmPassword.value = ''
-    return false
-  }
   for (const key in form) {
     for (const rule of rules[key]) {
       if (rule.required) {
@@ -74,18 +68,34 @@ const validator = (form, rules) => {
       }
     }
   }
+  if (confirmPassword.value !== '' && form.password !== confirmPassword.value) {
+    $Toast.open({
+      message: '输入的两次密码不相同!',
+      type: 'warning',
+      position: 'top-right',
+      duration: 3000
+    })
+    confirmPassword.value = ''
+    return false
+  }
   return true
 }
 // 是否可以点击按钮提交
+const loading = ref(false)
 const sendRegisterForm = () => {
+  loading.value = true
   switch (registerBy.value) {
     case 'username':
       if (validator(registerFormByUsername, rules)) {
-        $Toast.open({
-          message: '注册用户名: ' + registerFormByUsername.username + '\n注册密码: ' + registerFormByUsername.password,
-          type: 'info',
-          position: 'top-right',
-          duration: 3000
+        registerApi(registerFormByUsername).then(data => {
+          login(data)
+          $Toast.open({
+            message: `欢迎你, ${data.nickname}!`,
+            type: 'info',
+            position: 'top-right',
+            duration: 3000
+          })
+          loading.value = false
         })
       }
       break
@@ -112,6 +122,9 @@ const initData = () => {
 
 <template>
   <div class="register-view">
+    <div v-if="loading" class="loading-box">
+      <Loading v-model:active="loading" :width="64" :height="64" loader="dots" :canCancel="true" />
+    </div>
     <div class="register-title">注册</div>
     <div class="register-box">
       <ul class="register-choose-box">
@@ -144,7 +157,6 @@ const initData = () => {
           :input-box-height="40"
           prefix-icon="tips"
           show-password
-          :rules="rules.password"
           v-model:value="confirmPassword"/>
 
         <button class="username-register-btn" @click="sendRegisterForm">注册</button>

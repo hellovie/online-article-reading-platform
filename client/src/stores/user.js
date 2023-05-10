@@ -1,34 +1,36 @@
 import { defineStore } from 'pinia'
+import { reactive, ref } from 'vue'
+import router from '@/router/index.js'
 
-export const useUserAccountStore = defineStore('userAccountStore', {
-  state: () => {
-    return { username: '', nickname: '', token: '' }
-  },
+export const useUserStore = defineStore('user', () => {
+  const account = reactive({
+    id: '',
+    username: '',
+    nickname: '',
+    lastLoginIp: '',
+    lastLoginTime: ''
+  })
 
-  actions: {
-    login (user) {
-      this.username = user.username
-      this.nickname = user.nickname
-      this.token = user.token
-      window.sessionStorage.setItem('token', this.token)
-      window.sessionStorage.setItem('nickname', this.nickname)
-      window.sessionStorage.setItem('username', this.username)
-    },
-    isLogin () {
-      this.username = window.sessionStorage.getItem('username')
-      this.nickname = window.sessionStorage.getItem('nickname')
-      this.token = window.sessionStorage.getItem('token')
-      if (
-        this.token != null &&
-        this.token !== '' &&
-        this.nickname != null &&
-        this.nickname !== '' &&
-        this.username != null &&
-        this.username !== ''
-      ) {
-        return this.nickname
-      }
-      return ''
-    }
+  const token = ref('')
+
+  function login (loginVO) {
+    account.id = loginVO.id
+    account.username = loginVO.username
+    account.nickname = loginVO.nickname
+    account.lastLoginIp = loginVO.lastLoginIp
+    account.lastLoginTime = loginVO.lastLoginTime
+
+    token.value = loginVO.token
+
+    window.sessionStorage.setItem('token', token.value)
+    router.push('/home')
   }
+
+  function exit () {
+    account.value = ''
+    token.value = ''
+    window.sessionStorage.removeItem('token')
+  }
+
+  return { login, exit }
 })

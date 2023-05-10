@@ -29,7 +29,7 @@ const props = defineProps({
         // 校验正则
         regex: '',
         // 自定义校验规则
-        validator: () => {}
+        validator: undefined
       }]
     }
   },
@@ -121,8 +121,9 @@ const validator = (valid) => {
 const handleBlur = () => {
   for (let i = 0; i < props.rules.length; i++) {
     // 用户自定义了校验器或内置校验器校验失败
+    // console.log(props.rules[i].validator)
     if (props.rules[i].validator || !validator(props.rules[i])) {
-      // 校验失败, 直接显示
+    // 校验失败, 直接显示
       errorMsg.value = props.rules[i].message
       flag.value = true
       emit('validHandle', false)
@@ -134,7 +135,7 @@ const handleBlur = () => {
 // 获得焦点
 const handleFocus = (e) => {
   inputValue.value = e.target.value
-  inputTypeFromProps.value = props.inputType
+  // inputTypeFromProps.value = props.inputType
   flag.value = false
   errorMsg.value = ''
 }

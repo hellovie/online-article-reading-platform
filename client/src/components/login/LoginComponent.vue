@@ -2,6 +2,10 @@
 import { ref, reactive } from 'vue'
 import EivInput from '@/components/custom/EivInput.vue'
 import $Toast from '@/main.js'
+import { loginApi } from '@/http/api/user'
+import { useUserStore } from '@/stores/user'
+import Loading from 'vue-loading-overlay'
+const { login } = useUserStore()
 
 const loginBy = ref('username')
 // 切换不同方式的登录页面
@@ -65,15 +69,21 @@ const validator = (form, rules) => {
   return true
 }
 // 是否可以点击按钮提交
+const loading = ref(false)
 const sendLoginForm = () => {
+  loading.value = true
   switch (loginBy.value) {
     case 'username':
       if (validator(loginFormByUsername, rules)) {
-        $Toast.open({
-          message: '登录用户名: ' + loginFormByUsername.username + '\n登录密码: ' + loginFormByUsername.password,
-          type: 'info',
-          position: 'top-right',
-          duration: 3000
+        loginApi(loginFormByUsername).then(data => {
+          login(data)
+          $Toast.open({
+            message: `欢迎你, ${data.nickname}!`,
+            type: 'info',
+            position: 'top-right',
+            duration: 3000
+          })
+          loading.value = false
         })
       }
       break
@@ -99,6 +109,9 @@ const initData = () => {
 
 <template>
   <div class="login-view">
+    <div v-if="loading" class="loading-box">
+      <Loading v-model:active="loading" :width="64" :height="64" loader="dots" :canCancel="true" />
+    </div>
     <div class="login-title">登录</div>
     <div class="login-box">
       <ul class="login-choose-box">
