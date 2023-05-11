@@ -1,16 +1,21 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import LoginComponent from '@/components/login/LoginComponent.vue'
 import RegisterComponent from '@/components/login/RegisterComponent.vue'
 import EivIcon from '@/components/custom/EivIcon.vue'
 import $Toast from '@/main.js'
 
+const router = useRouter()
 const isLoginPage = ref(true)
 const gotoLoginPage = () => {
   isLoginPage.value = !isLoginPage.value
 }
 const gotoRegisterPage = () => {
   isLoginPage.value = !isLoginPage.value
+}
+const gotoHome = () => {
+  router.push('/home')
 }
 // 其他登录方式
 const loginByGithub = () => {
@@ -72,7 +77,7 @@ const loginByMore = () => {
             <div class="white-circle"></div>
             前往注册
           </button>
-          <EivIcon icon-class="logo" />
+          <EivIcon icon-class="logo" isPointer v-on:click="gotoHome"/>
           <img src="@/assets/image/title.png" alt="在线文章阅读平台" />
         </div>
 
@@ -238,7 +243,6 @@ const loginByMore = () => {
 }
 
 .login-page>.box>.container>.web-title>img {
-  /* 500 * 680 */
   display: block;
   height: 40px;
 }

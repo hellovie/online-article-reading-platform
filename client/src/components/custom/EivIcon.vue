@@ -16,6 +16,11 @@ const props = defineProps({
     type: Boolean,
     require: false,
     default: false
+  },
+  isHover: {
+    type: Boolean,
+    require: false,
+    default: false
   }
 })
 const iconName = computed(() => {
@@ -24,9 +29,11 @@ const iconName = computed(() => {
 })
 const iconStyleVar = computed(() => {
   const cursorStyle = props.isPointer ? 'pointer' : 'default'
+  const hoverColor = props.isHover ? 'rgba(0, 0, 0, 0.1)' : 'transparent'
   return {
     '--icon-size': props.iconSize + 'px',
-    '--cursor-style': cursorStyle
+    '--cursor-style': cursorStyle,
+    '--icon-hover-bg-color': hoverColor
   }
 })
 const emit = defineEmits(['click'])
@@ -41,11 +48,21 @@ const emit = defineEmits(['click'])
   width: var(--icon-size);
   height: var(--icon-size);
   cursor: var(--cursor-style);
+  display: block;
+  border-radius: 3px;
+  padding: 2px;
+  box-sizing: border-box;
 
   -webkit-user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
   user-select: none;
+
+  transition: background-color .3s;
+}
+
+.eiv-icon:hover {
+  background: var(--icon-hover-bg-color);
 }
 </style>

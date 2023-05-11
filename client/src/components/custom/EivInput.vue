@@ -38,10 +38,30 @@ const props = defineProps({
     required: false,
     default: ''
   },
+  prefixIconIsPointer: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  prefixIconIsHover: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
   suffixIcon: {
     type: String,
     required: false,
     default: ''
+  },
+  suffixIconIsPointer: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  suffixIconIsHover: {
+    type: Boolean,
+    required: false,
+    default: false
   },
   // 除了密码框外, 其他类型输入框可以添加可清除图标, 用户自定义 suffixIcon 后将不生效.
   clearable: {
@@ -165,26 +185,28 @@ const clearInput = () => {
   <!-- type: text -->
   <div class="input-box" :style="inputStyleVar">
     <EivIcon v-if="prefixIcon !== ''" :icon-class="prefixIcon" :icon-size="inputBoxHeight - 10"
-      v-on:click="emit('prefixIconClick')" />
+      v-on:click="emit('prefixIconClick')" :is-pointer="prefixIconIsPointer" :is-hover="prefixIconIsHover" />
 
     <input class="eiv-input" :type="inputTypeFromProps" :placeholder="placeholder" :value="value"
       @input="inputValueToInput" @blur="handleBlur" @focus="handleFocus" />
 
     <!-- 用户设置后图标 -->
     <EivIcon v-if="suffixIcon !== ''" :icon-class="suffixIcon" :icon-size="inputBoxHeight - 10"
-      v-on:click="emit('suffixIconClick')" />
+      v-on:click="emit('suffixIconClick')" :is-pointer="suffixIconIsPointer" :is-hover="suffixIconIsHover" />
     <!-- 用户未设置后图标, 且不是密码框类型和输入框有值, 清空图标 -->
     <EivIcon v-else-if="clearable && inputType !== 'password' && inputValue !== ''"
       icon-class="clear"
-      :icon-size="inputBoxHeight - 20"
+      :icon-size="inputBoxHeight - 15"
       v-on:click="clearInput"
-      :is-pointer="true" />
+      :is-pointer="true"
+      :is-hover="true" />
     <!-- 用户未设置后图标, 且是密码框类型和输入框有值, 显示密码图标 -->
     <EivIcon v-else-if="showPassword && inputType === 'password' && inputValue !== ''"
       :icon-class="isShowPassword ? 'open-eye' : 'close-eye'"
-      :icon-size="inputBoxHeight - 20"
+      :icon-size="inputBoxHeight - 15"
       v-on:click="showInputPassword"
-      :is-pointer="true" />
+      :is-pointer="true"
+      :is-hover="true" />
 
     <div class="error-message" v-show="flag">
       <EivIcon icon-class="warning" :icon-size="20" />
@@ -203,7 +225,7 @@ const clearInput = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: medium;
+  font-size: small;
 
   width: var(--input-width);
   height: var(--input-height);

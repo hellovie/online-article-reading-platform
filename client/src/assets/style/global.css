@@ -6,16 +6,26 @@
   /* SVG 图标主要颜色 */
   --icon-main--color: #3b7d90;
 
+  /* 用户名片 */
+  /* --user-card--bg-color: #343a40; */
+  /* --user-card--nickname-color: #fff; */
+  /* --user-card--username-color: #F0F0F0; */
+  --user-card--bg-color: #fff;
+  --user-card--nickname-color: #0e0e38;
+  --user-card--username-color: #8c92a4;
+
   /** 网站主题颜色 */
   --main-primary--color: #3b7d90;
-  --main-primary-hover--color: #3b7e90cd;
+  --main-primary-hover--color: #629eae;
   /** 网站基础文字颜色, 例如导航栏字体 */
   --main-font-active--color: #0e0e38;
   --main-font-inactive--color: #8c92a4;
   /** 网站背景颜色 */
-  --main-bg--color: rgba(240, 255, 255, 0.6);
+  --main-bg--color: #f6f6f6;
+  
   /** 承载内容的卡片背景颜色 */
   --main-card-bg--color: #fff;
+  --main-card--shadow: 0 1px 3px hsla(0, 0%, 7%, .1);
   /** 分割线颜色 */
   --main-split-line--color: #F0F0F0;
   /** 提示框颜色 */
@@ -28,22 +38,34 @@
   margin: 0;
   font-family: 'JetBrains Mono', -apple-system, 'Helvetica Neue', Helvetica, Arial, 'PingFang SC',
     'Hiragino Sans GB', 'WenQuanYi Micro Hei', 'Microsoft Yahei', sans-serif;
+
+  /* 禁止复制文本 */
+  -webkit-user-select:none;/*webkit浏览器*/ 
+  -moz-user-select:none;/*火狐*/ 
+  -ms-user-select:none;/*IE10*/ 
+  user-select:none;  
 }
 
 /* 滚动条样式 */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 5px;
+  height: 5px;
 }
 
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   background-color: #fff;
-  border-radius: 7px;
+  background-color: transparent;
+  border-radius: 5px;
+} */
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(162, 170, 166, 0.7);
-  border-radius: 7px;
+  background-color: rgba(166, 171, 176, 0.7);
+  border-radius: 5px;
 }
 
 /* 单行省略 */

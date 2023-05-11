@@ -1,8 +1,9 @@
 import axios from 'axios'
 import serverConfig from './config'
-import router from '@/router/index.js'
+import { useRouter } from 'vue-router'
 import $Toast from '@/main.js'
 
+const router = useRouter()
 const serviceAxios = axios.create({
   baseURL: serverConfig.baseURL,
   timeout: 10000
