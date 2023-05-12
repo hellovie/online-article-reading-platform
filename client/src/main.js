@@ -10,10 +10,14 @@ import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
 
 const app = createApp(App)
+const Toast = useToast({
+  position: 'top-right',
+  duration: 3000
+})
 
 app.use(createPinia())
 app.use(router)
+app.provide('Toast', Toast)
 app.mount('#app')
 
-const $Toast = useToast()
-export default $Toast
+export { Toast }

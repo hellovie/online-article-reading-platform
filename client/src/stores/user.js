@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
-import router from '@/router/index.js'
-import $Toast from '@/main.js'
+import router from '@/router'
+import { Toast } from '@/main.js'
 
 export const useUserStore = defineStore('user', () => {
   const account = reactive({
@@ -31,12 +31,7 @@ export const useUserStore = defineStore('user', () => {
     account.value = ''
     token.value = ''
     window.sessionStorage.removeItem('token')
-    $Toast.open({
-      message: '账号已成功退出!',
-      type: 'success',
-      position: 'top-right',
-      duration: 3000
-    })
+    Toast.success('账号已成功退出!')
   }
 
   return { login, exit }

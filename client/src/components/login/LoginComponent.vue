@@ -1,12 +1,12 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, inject } from 'vue'
 import EivInput from '@/components/custom/EivInput.vue'
-import $Toast from '@/main.js'
 import { loginApi } from '@/http/api/user'
 import { useUserStore } from '@/stores/user'
 import Loading from 'vue-loading-overlay'
 const { login } = useUserStore()
 
+const $Toast = inject('Toast')
 const loginBy = ref('username')
 // 切换不同方式的登录页面
 const loginByUsername = () => {
@@ -77,12 +77,7 @@ const sendLoginForm = () => {
       if (validator(loginFormByUsername, rules)) {
         loginApi(loginFormByUsername).then(data => {
           login(data)
-          $Toast.open({
-            message: `欢迎你, ${data.nickname}!`,
-            type: 'info',
-            position: 'top-right',
-            duration: 3000
-          })
+          $Toast.info(`欢迎你, ${data.nickname}!`)
           loading.value = false
         })
       }
@@ -92,12 +87,7 @@ const sendLoginForm = () => {
     case 'email':
       break
     default:
-      $Toast.open({
-        message: '无效的注册页!',
-        type: 'info',
-        position: 'top-right',
-        duration: 3000
-      })
+      $Toast.warning('无效的登录页!')
   }
 }
 // 初始化数据

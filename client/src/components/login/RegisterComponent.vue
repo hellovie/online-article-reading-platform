@@ -1,12 +1,12 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, inject } from 'vue'
 import EivInput from '@/components/custom/EivInput.vue'
-import $Toast from '@/main.js'
 import { registerApi } from '@/http/api/user'
 import { useUserStore } from '@/stores/user'
 import Loading from 'vue-loading-overlay'
 const { login } = useUserStore()
 
+const $Toast = inject('Toast')
 const registerBy = ref('username')
 // 切换不同方式的注册页面
 const registerByUsername = () => {
@@ -69,12 +69,7 @@ const validator = (form, rules) => {
     }
   }
   if (confirmPassword.value !== '' && form.password !== confirmPassword.value) {
-    $Toast.open({
-      message: '输入的两次密码不相同!',
-      type: 'warning',
-      position: 'top-right',
-      duration: 3000
-    })
+    $Toast.warning('输入的两次密码不相同!')
     confirmPassword.value = ''
     return false
   }
@@ -89,12 +84,7 @@ const sendRegisterForm = () => {
       if (validator(registerFormByUsername, rules)) {
         registerApi(registerFormByUsername).then(data => {
           login(data)
-          $Toast.open({
-            message: `欢迎你, ${data.nickname}!`,
-            type: 'info',
-            position: 'top-right',
-            duration: 3000
-          })
+          $Toast.info(`欢迎你, ${data.nickname}!`)
           loading.value = false
         })
       }
@@ -104,12 +94,7 @@ const sendRegisterForm = () => {
     case 'email':
       break
     default:
-      $Toast.open({
-        message: '无效的注册页!',
-        type: 'info',
-        position: 'top-right',
-        duration: 3000
-      })
+      $Toast.warning('无效的注册页!')
   }
 }
 // 初始化数据

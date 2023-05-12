@@ -1,10 +1,10 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, inject } from 'vue'
 import EivIcon from '@/components/custom/EivIcon.vue'
 import EivInput from '@/components/custom/EivInput.vue'
 import UserCard from '@/components/card/UserCard.vue'
 import TodoCard from '@/components/card/TodoCard.vue'
-import $Toast from '@/main.js'
+const $Toast = inject('Toast')
 
 const todoList = reactive([
   {
@@ -41,28 +41,13 @@ const todoList = reactive([
 const searchKey = ref('')
 const searchTips = ref('请输入关键字')
 const addTodo = () => {
-  $Toast.open({
-    message: '功能紧急开发中...',
-    type: 'info',
-    position: 'top-right',
-    duration: 3000
-  })
+  $Toast.info('功能紧急开发中...')
 }
 const sendBug = () => {
-  $Toast.open({
-    message: '功能紧急开发中...',
-    type: 'info',
-    position: 'top-right',
-    duration: 3000
-  })
+  $Toast.info('功能紧急开发中...')
 }
 const search = () => {
-  $Toast.open({
-    message: '功能紧急开发中...',
-    type: 'info',
-    position: 'top-right',
-    duration: 3000
-  })
+  $Toast.info('功能紧急开发中...')
 }
 </script>
 

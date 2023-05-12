@@ -1,10 +1,10 @@
 <script setup>
-import { reactive } from 'vue'
+import { inject, reactive } from 'vue'
 import EivIcon from '@/components/custom/EivIcon.vue'
-import $Toast from '@/main.js'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 const { exit } = useUserStore()
+const $Toast = inject('Toast')
 
 const router = useRouter()
 const user = reactive({
@@ -13,36 +13,16 @@ const user = reactive({
   username: 'hellovie'
 })
 const write = () => {
-  $Toast.open({
-    message: '功能紧急开发中...',
-    type: 'info',
-    position: 'top-right',
-    duration: 3000
-  })
+  $Toast.info('功能紧急开发中...')
 }
 const openDraft = () => {
-  $Toast.open({
-    message: '功能紧急开发中...',
-    type: 'info',
-    position: 'top-right',
-    duration: 3000
-  })
+  $Toast.info('功能紧急开发中...')
 }
 const openUserHomePage = () => {
-  $Toast.open({
-    message: '功能紧急开发中...',
-    type: 'info',
-    position: 'top-right',
-    duration: 3000
-  })
+  $Toast.info('功能紧急开发中...')
 }
 const copyUsername = () => {
-  $Toast.open({
-    message: '功能紧急开发中...',
-    type: 'info',
-    position: 'top-right',
-    duration: 3000
-  })
+  $Toast.info('功能紧急开发中...')
 }
 const exitLogin = () => {
   exit()
@@ -53,12 +33,7 @@ const navBtn = (path) => {
   if (path === '/home') {
     router.push(path)
   }
-  $Toast.open({
-    message: '功能紧急开发中...',
-    type: 'info',
-    position: 'top-right',
-    duration: 3000
-  })
+  $Toast.info('功能紧急开发中...')
 }
 </script>
 
@@ -82,32 +57,32 @@ const navBtn = (path) => {
     </div>
     <div class="user-func">
       <div>
-        <Button class="user-func-btn" @click="navBtn('/follow')">
+        <button class="user-func-btn" @click="navBtn('/follow')">
           <EivIcon icon-class="follow" :icon-size="30" is-pointer />
           <span class="follow">关注</span>
-        </Button>
-        <Button class="user-func-btn" @click="navBtn('/fans')">
+        </button>
+        <button class="user-func-btn" @click="navBtn('/fans')">
           <EivIcon icon-class="fans" :icon-size="30" is-pointer />
           <span class="fans">粉丝</span>
-        </Button>
-        <Button class="user-func-btn" @click="navBtn('/collect')">
+        </button>
+        <button class="user-func-btn" @click="navBtn('/collect')">
           <EivIcon icon-class="collect" :icon-size="30" is-pointer />
           <span class="collect">收藏</span>
-        </Button>
+        </button>
       </div>
       <div>
-        <Button class="user-func-btn" @click="navBtn('/home')">
+        <button class="user-func-btn" @click="navBtn('/home')">
           <EivIcon icon-class="home" :icon-size="30" is-pointer />
           <span class="home">主页</span>
-        </Button>
-        <Button class="user-func-btn" @click="navBtn('/creation')">
+        </button>
+        <button class="user-func-btn" @click="navBtn('/creation')">
           <EivIcon icon-class="creation" :icon-size="30" is-pointer />
           <span class="creation">创作</span>
-        </Button>
-        <Button class="user-func-btn" @click="navBtn('/more')">
+        </button>
+        <button class="user-func-btn" @click="navBtn('/more')">
           <EivIcon icon-class="more" :icon-size="30" is-pointer />
           <span class="more">更多</span>
-        </Button>
+        </button>
       </div>
     </div>
     <div class="user-create">

@@ -1,9 +1,8 @@
 import axios from 'axios'
 import serverConfig from './config'
-import { useRouter } from 'vue-router'
-import $Toast from '@/main.js'
+import router from '@/router'
+import { Toast } from '@/main.js'
 
-const router = useRouter()
 const serviceAxios = axios.create({
   baseURL: serverConfig.baseURL,
   timeout: 10000
@@ -28,38 +27,18 @@ serviceAxios.interceptors.response.use(
     // console.log('响应结果' + res)
     // 调用失败但 HTTP status 为 200.
     if (res.data.code !== 10000) {
-      $Toast.open({
-        message: res.data.message,
-        type: 'info',
-        position: 'top-right',
-        duration: 3000
-      })
+      Toast.info(res.data.message)
     }
     return res.data.data
   },
   (error) => {
     if (error.response.status === 401) {
-      $Toast.open({
-        message: error.response.data.message,
-        type: 'error',
-        position: 'top-right',
-        duration: 3000
-      })
+      Toast.error(error.response.data.message)
       router.push('/login')
     } else if (error.response.status >= 500) {
-      $Toast.open({
-        message: error.response.data.message,
-        type: 'error',
-        position: 'top-right',
-        duration: 3000
-      })
+      Toast.error(error.response.data.message)
     } else {
-      $Toast.open({
-        message: error.response.data.message,
-        type: 'warning',
-        position: 'top-right',
-        duration: 3000
-      })
+      Toast.warning(error.response.data.message)
       return error.response.data.message !== '' ? Promise.reject(new Error(error.response.data.message)) : Promise.reject(error)
     }
   }

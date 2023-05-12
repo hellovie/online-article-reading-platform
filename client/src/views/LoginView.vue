@@ -1,11 +1,11 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import LoginComponent from '@/components/login/LoginComponent.vue'
 import RegisterComponent from '@/components/login/RegisterComponent.vue'
 import EivIcon from '@/components/custom/EivIcon.vue'
-import $Toast from '@/main.js'
 
+const $Toast = inject('Toast')
 const router = useRouter()
 const isLoginPage = ref(true)
 const gotoLoginPage = () => {
@@ -19,44 +19,19 @@ const gotoHome = () => {
 }
 // 其他登录方式
 const loginByGithub = () => {
-  $Toast.open({
-    message: '功能紧急开发中...',
-    type: 'info',
-    position: 'top-right',
-    duration: 3000
-  })
+  $Toast.info('功能紧急开发中...')
 }
 const loginByWeiBo = () => {
-  $Toast.open({
-    message: '功能紧急开发中...',
-    type: 'info',
-    position: 'top-right',
-    duration: 3000
-  })
+  $Toast.info('功能紧急开发中...')
 }
 const loginByWeChat = () => {
-  $Toast.open({
-    message: '功能紧急开发中...',
-    type: 'info',
-    position: 'top-right',
-    duration: 3000
-  })
+  $Toast.info('功能紧急开发中...')
 }
 const loginByQQ = () => {
-  $Toast.open({
-    message: '功能紧急开发中...',
-    type: 'info',
-    position: 'top-right',
-    duration: 3000
-  })
+  $Toast.info('功能紧急开发中...')
 }
 const loginByMore = () => {
-  $Toast.open({
-    message: '功能紧急开发中...',
-    type: 'info',
-    position: 'top-right',
-    duration: 3000
-  })
+  $Toast.info('功能紧急开发中...')
 }
 </script>
 
