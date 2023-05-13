@@ -15,7 +15,7 @@ const gotoRegisterPage = () => {
   isLoginPage.value = !isLoginPage.value
 }
 const gotoHome = () => {
-  router.push('/home')
+  router.push('/')
 }
 // 其他登录方式
 const loginByGithub = () => {

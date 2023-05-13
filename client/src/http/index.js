@@ -5,7 +5,7 @@ import { Toast } from '@/main.js'
 
 const serviceAxios = axios.create({
   baseURL: serverConfig.baseURL,
-  timeout: 10000
+  timeout: serverConfig.timeout
 })
 
 serviceAxios.interceptors.request.use(
@@ -32,12 +32,19 @@ serviceAxios.interceptors.response.use(
     return res.data.data
   },
   (error) => {
-    if (error.response.status === 401) {
+    // 超时处理
+    if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) {
+      Toast.error('请求超时, 请稍后再试!')
+    } else if (error.response.status === 401) {
+      // 用户未登录
       Toast.error(error.response.data.message)
+      window.sessionStorage.removeItem('token')
       router.push('/login')
     } else if (error.response.status >= 500) {
+      // 服务器异常
       Toast.error(error.response.data.message)
     } else {
+      // 若不是超时,则返回未错误信息
       Toast.warning(error.response.data.message)
       return error.response.data.message !== '' ? Promise.reject(new Error(error.response.data.message)) : Promise.reject(error)
     }

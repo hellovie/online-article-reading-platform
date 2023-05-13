@@ -68,6 +68,10 @@ const validator = (form, rules) => {
   }
   return true
 }
+// 若无响应, 加载画面最多持续5s.
+const closeLoading = () => {
+  loading.value = false
+}
 // 是否可以点击按钮提交
 const loading = ref(false)
 const sendLoginForm = () => {
@@ -79,7 +83,12 @@ const sendLoginForm = () => {
           login(data)
           $Toast.info(`欢迎你, ${data.nickname}!`)
           loading.value = false
+        }).catch(error => {
+          console.log(error)
+          closeLoading()
         })
+      } else {
+        closeLoading()
       }
       break
     case 'phone':
@@ -88,6 +97,7 @@ const sendLoginForm = () => {
       break
     default:
       $Toast.warning('无效的登录页!')
+      closeLoading()
   }
 }
 // 初始化数据
