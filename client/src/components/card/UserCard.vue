@@ -21,8 +21,6 @@ const user = reactive({
 onMounted(() => {
   isLogin().then(res => {
     user.account = res
-    // TODO: 头像尚未开发
-    user.account.avatar = 'https://img.wxcha.com/m00/12/db/594dd9fb43029a58df9acc0e4591d94b.jpg'
   })
 })
 // 是否是当前路由地址

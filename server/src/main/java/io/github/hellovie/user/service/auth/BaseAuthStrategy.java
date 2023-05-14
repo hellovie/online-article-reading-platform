@@ -3,6 +3,7 @@ package io.github.hellovie.user.service.auth;
 import io.github.hellovie.exception.business.DatabaseFieldConflictException;
 import io.github.hellovie.exception.business.DatabaseFieldNotFoundException;
 import io.github.hellovie.exception.business.DatabaseFieldVerifyException;
+import io.github.hellovie.file.domain.entity.File;
 import io.github.hellovie.security.util.TokenUtil;
 import io.github.hellovie.user.domain.entity.Role;
 import io.github.hellovie.user.domain.entity.User;
@@ -11,9 +12,12 @@ import io.github.hellovie.user.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.*;
 
-import static io.github.hellovie.user.domain.enums.RolesConstant.ROLE_USER_ID;
+import static io.github.hellovie.user.domain.enums.DefaultProperties.DEFAULT_AVATAR;
+import static io.github.hellovie.user.domain.enums.DefaultProperties.DEFAULT_ROLE;
 import static io.github.hellovie.user.domain.enums.UserExceptionType.*;
 
 /**
@@ -31,6 +35,8 @@ public abstract class BaseAuthStrategy {
     private UserMapper userMapper;
     @Resource(name = "passwordEncoder")
     private PasswordEncoder passwordEncoder;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     /**
      * 登录账号.
@@ -102,19 +108,26 @@ public abstract class BaseAuthStrategy {
 
         // 设置加密后的密码、最后登录IP、最后登录时间。
         user.setPassword(encodePassword).setLastLoginTime(new Date()).setLastLoginIp(ip);
-
+        // 设置默认头像
+        File file = new File();
+        file.setId(DEFAULT_AVATAR);
+        user.setAvatar(file);
         // 绑定普通用户角色身份
         ArrayList<Role> roles = new ArrayList<>();
         Role role = new Role();
-        role.setId(ROLE_USER_ID);
+        role.setId(DEFAULT_ROLE);
         roles.add(role);
         user.setRoles(roles);
 
-        User saveUser = userRepository.save(user);
+        userRepository.save(user);
+        // 刷新一级缓存, 获取最新数据. 否则 JPA 只会从缓存拿数据, 获取不到最新的数据.
+        entityManager.clear();
+        // 再取一次值.
+        User newUser = userRepository.findByUsername(user.getUsername()).get();
 
         HashMap<String, Object> map = new HashMap<>(2);
-        map.put("user", userMapper.toDto(saveUser));
-        map.put("token", TokenUtil.createToken(saveUser.getUsername()));
+        map.put("user", userMapper.toDto(newUser));
+        map.put("token", TokenUtil.createToken(newUser.getUsername()));
         return map;
     }
 

@@ -27,3 +27,18 @@ spring:
   flyway:
     enabled: true
     encoding: UTF-8
+
+  #设置单个文件的大小
+  servlet:
+    multipart:
+      max-file-size: 50MB
+  #设置单次请求的文件的总大小
+      max-request-size: 50MB
+
+# 本地文件上传地址
+hellovie:
+  protocol: http
+  file:
+    root-path: D:/local-storage
+    avatar-path: /avatar
+    default-path: /default

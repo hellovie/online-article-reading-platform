@@ -1,6 +1,7 @@
 package io.github.hellovie.user.domain.dto;
 
 import io.github.hellovie.core.domain.BaseDTO;
+import io.github.hellovie.file.domain.dto.FileDTO;
 import io.github.hellovie.user.domain.entity.Role;
 import lombok.Data;
 
@@ -19,6 +20,9 @@ import java.util.List;
 public class UserDTO extends BaseDTO {
     /** 用户名 */
     private String username;
+
+    /** 用户头像 */
+    private FileDTO avatar;
 
     /** 用户昵称 */
     private String nickname;

@@ -1,5 +1,6 @@
 package io.github.hellovie.security;
 
+import io.github.hellovie.file.config.FilePathMappingConfig;
 import io.github.hellovie.security.exception.UserAuthenticationEntryPoint;
 import io.github.hellovie.security.filter.JwtAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
@@ -44,7 +45,9 @@ public class SecurityConfig {
     private static final String[] ALLOWED_INTERFACES = {
             "/users/login", "/users/register",
             // swagger 放行
-            "/swagger-ui.html", "/swagger-ui/*", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs", "/webjars/**"
+            "/swagger-ui.html", "/swagger-ui/*", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs", "/webjars/**",
+            // 资源路径
+            FilePathMappingConfig.FILE_ROOT + "/**"
     };
 
     /** JWT 加密密钥 */

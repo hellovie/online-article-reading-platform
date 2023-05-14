@@ -1,6 +1,7 @@
 package io.github.hellovie.user.domain.entity;
 
 import io.github.hellovie.core.domain.BaseEntity;
+import io.github.hellovie.file.domain.entity.File;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,6 +22,10 @@ public class User extends BaseEntity {
     /** 用户名 */
     @Column(updatable = false)
     private String username;
+
+    @OneToOne
+    @JoinColumn(name="avatar",referencedColumnName="id")
+    private File avatar;
 
     /** 用户昵称 */
     private String nickname;

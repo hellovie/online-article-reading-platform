@@ -5,6 +5,7 @@ import io.github.hellovie.user.domain.entity.User;
 import io.github.hellovie.user.domain.vo.LoginVO;
 import io.github.hellovie.user.domain.vo.UserVO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * 用户模块 Java Bean 映射器, mapstruct实现. <br>
@@ -18,7 +19,9 @@ import org.mapstruct.Mapper;
 public interface UserMapper {
     UserDTO toDto(User entity);
 
+    @Mapping(target = "avatar", ignore = true)
     LoginVO toLoginVO(UserDTO dto);
 
+    @Mapping(target = "avatar", ignore = true)
     UserVO toVO(UserDTO dto);
 }

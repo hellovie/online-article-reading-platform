@@ -23,6 +23,10 @@ public class UserVO extends BaseVO {
     @ApiModelProperty(value = "用户名")
     private String username;
 
+    /** 头像 */
+    @ApiModelProperty(value = "头像")
+    private String avatar;
+
     /** 用户昵称 */
     @ApiModelProperty(value = "用户昵称")
     private String nickname;
