@@ -24,7 +24,11 @@ public enum CommonExceptionType implements IExceptionType {
     /** 未知 Host 异常. */
     UNKNOWN_HOST(5, "无法识别主机！"),
     /** 策略类型与策略组件无法映射. */
-    STRATEGY_TYPE_NOT_MAPPER_STRATEGY_COMPONENT(5, "策略类型与策略组件无法映射！"),
+    STRATEGY_TYPE_NOT_MAPPER_STRATEGY_COMPONENT(6, "策略类型与策略组件无法映射！"),
+    /** 无效的排序规则. */
+    INVALID_COLLATION(7, "无效的排序规则！"),
+
+
     /** 未知错误. */
     UNKNOWN_EXCEPTION(999, "服务器繁忙，请稍后再试！");
 

@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Set;
 
 import static io.github.hellovie.exception.CommonExceptionType.*;
 
@@ -80,17 +83,35 @@ public class ExtraExceptionHandler {
      * @return ResultResponse (code + message).
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResultResponse validationExceptionHandler(MethodArgumentNotValidException ex) {
-
-        BindingResult exceptions = ex.getBindingResult();
-        // 判断异常中是否有错误信息, 如果存在就使用异常中的消息, 否则使用默认消息.
-        if (exceptions.hasErrors()) {
-            List<ObjectError> errors = exceptions.getAllErrors();
-            if (!errors.isEmpty()) {
+    @ExceptionHandler({
+            MethodArgumentNotValidException.class, // 转换对象类 Request 的校验失败结果
+            ConstraintViolationException.class // 转换单一属性 Request 的校验失败结果
+    })
+    public ResultResponse validationExceptionHandler(Exception ex) {
+        if (ex instanceof ConstraintViolationException) {
+            ConstraintViolationException e = (ConstraintViolationException) ex;
+            // 判断异常中是否有错误信息, 如果存在就使用异常中的消息, 否则使用默认消息.
+            if (!e.getConstraintViolations().isEmpty()) {
                 // 这里列出了全部错误参数, 按正常逻辑, 只需要第一条错误即可.
-                FieldError fieldError = (FieldError) errors.get(0);
-                return ResultResponse.fail(VALIDATION_FAILED.getCode(), fieldError.getDefaultMessage());
+                String message = "";
+                for (ConstraintViolation<?> constraintViolation : e.getConstraintViolations()) {
+                    message = constraintViolation.getMessage();
+                    if (message != null && !"".equals(message)) {
+                        return ResultResponse.fail(VALIDATION_FAILED.getCode(), message);
+                    }
+                }
+            }
+        } else if (ex instanceof MethodArgumentNotValidException) {
+            MethodArgumentNotValidException e = (MethodArgumentNotValidException) ex;
+            BindingResult exceptions = e.getBindingResult();
+            // 判断异常中是否有错误信息, 如果存在就使用异常中的消息, 否则使用默认消息.
+            if (exceptions.hasErrors()) {
+                List<ObjectError> errors = exceptions.getAllErrors();
+                if (!errors.isEmpty()) {
+                    // 这里列出了全部错误参数, 按正常逻辑, 只需要第一条错误即可.
+                    FieldError fieldError = (FieldError) errors.get(0);
+                    return ResultResponse.fail(VALIDATION_FAILED.getCode(), fieldError.getDefaultMessage());
+                }
             }
         }
         return ResultResponse.fail(VALIDATION_FAILED);

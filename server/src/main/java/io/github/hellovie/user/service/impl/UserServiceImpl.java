@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDTO getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return userMapper.toDto(checkUserByUsername(authentication.getName()));
+        return userMapper.toDTO(checkUserByUsername(authentication.getName()));
     }
 
     /**

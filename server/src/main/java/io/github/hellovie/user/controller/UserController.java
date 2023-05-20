@@ -1,8 +1,6 @@
 package io.github.hellovie.user.controller;
 
 import io.github.hellovie.core.util.ResultResponse;
-import io.github.hellovie.file.domain.dto.FileDTO;
-import io.github.hellovie.file.service.FileUploadService;
 import io.github.hellovie.user.domain.dto.UserDTO;
 import io.github.hellovie.user.domain.request.LoginRequest;
 import io.github.hellovie.user.domain.request.RegisterRequest;
@@ -21,7 +19,6 @@ import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.net.UnknownHostException;
 import java.util.Map;
 
 import static io.github.hellovie.user.domain.enums.RolesConstant.ROLE_ADMIN_KEY;
@@ -46,8 +43,6 @@ public class UserController {
     private UserMapper userMapper;
     @Resource(name = "authServiceImpl")
     private AuthService authService;
-    @Resource(name = "fileUploadServiceImpl")
-    private FileUploadService fileUploadService;
 
     /**
      * 用户登录 (默认登录策略, username + password).
@@ -57,14 +52,10 @@ public class UserController {
      */
     @ApiOperation("用户登录")
     @PostMapping("/login")
-    public ResultResponse<LoginVO> login(HttpServletRequest httpRequest, @Valid @RequestBody LoginRequest request) throws UnknownHostException {
+    public ResultResponse<LoginVO> login(HttpServletRequest httpRequest, @Valid @RequestBody LoginRequest request) {
         Map<String, Object> map = authService.login(DEFAULT_AUTH_STRATEGY, request, IpUtil.getIpAddr(httpRequest));
-        UserDTO userDTO = (UserDTO) map.get("user");
-        LoginVO loginVO = userMapper.toLoginVO(userDTO);
+        LoginVO loginVO = userMapper.toLoginVO((UserDTO) map.get("user"));
         loginVO.setToken((String) map.get("token"));
-        FileDTO avatar = userDTO.getAvatar();
-        String fullPath = avatar.getFullPath(fileUploadService.getStorageService(avatar.getStorage()).getRootPath());
-        loginVO.setAvatar(fullPath);
         return ResultResponse.success(loginVO);
     }
 
@@ -76,14 +67,10 @@ public class UserController {
      */
     @ApiOperation("用户注册")
     @PostMapping("/register")
-    public ResultResponse<LoginVO> register(HttpServletRequest httpRequest, @Valid @RequestBody RegisterRequest request) throws UnknownHostException {
+    public ResultResponse<LoginVO> register(HttpServletRequest httpRequest, @Valid @RequestBody RegisterRequest request) {
         Map<String, Object> map = authService.register(DEFAULT_AUTH_STRATEGY, request, IpUtil.getIpAddr(httpRequest));
-        UserDTO userDTO = (UserDTO) map.get("user");
         LoginVO loginVO = userMapper.toLoginVO((UserDTO) map.get("user"));
         loginVO.setToken((String) map.get("token"));
-        FileDTO avatar = userDTO.getAvatar();
-        String fullPath = avatar.getFullPath(fileUploadService.getStorageService(avatar.getStorage()).getRootPath());
-        loginVO.setAvatar(fullPath);
         return ResultResponse.success(loginVO);
     }
 
@@ -108,12 +95,9 @@ public class UserController {
      */
     @ApiOperation("获取用户账号信息")
     @GetMapping
-    public ResultResponse<UserVO> getUserAccountInfo() throws UnknownHostException {
+    public ResultResponse<UserVO> getUserAccountInfo() {
         UserDTO userDTO = userService.getUserAccountInfoByToken();
         UserVO userVO = userMapper.toVO(userDTO);
-        FileDTO avatar = userDTO.getAvatar();
-        String fullPath = avatar.getFullPath(fileUploadService.getStorageService(avatar.getStorage()).getRootPath());
-        userVO.setAvatar(fullPath);
         return ResultResponse.success(userVO);
     }
 }

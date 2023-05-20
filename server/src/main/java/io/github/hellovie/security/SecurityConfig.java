@@ -47,7 +47,9 @@ public class SecurityConfig {
             // swagger 放行
             "/swagger-ui.html", "/swagger-ui/*", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs", "/webjars/**",
             // 资源路径
-            FilePathMappingConfig.FILE_ROOT + "/**"
+            FilePathMappingConfig.FILE_ROOT + "/**",
+            // 查询文章放行
+            "/articles/views/**"
     };
 
     /** JWT 加密密钥 */

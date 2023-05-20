@@ -5,7 +5,7 @@ import io.github.hellovie.file.domain.entity.File;
 import org.mapstruct.Mapper;
 
 /**
- * 文件模块 Java Bean 映射器, mapstruct实现. <br>
+ * 文件模块 Java Bean 映射器, mapstruct 实现. <br>
  *
  * @author hellovie <br>
  * @version 1.0.0 2023/5/14 <br>
@@ -14,5 +14,5 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring")
 public interface FileMapper {
-    FileDTO toDto(File entity);
+    FileDTO toDTO(File entity);
 }

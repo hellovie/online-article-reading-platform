@@ -83,12 +83,16 @@ public class BusinessExceptionHandler {
      * Http Code: 400 (请求错误.)
      * <p>BusinessException 是所有业务异常的父类, 放置到最后进行捕获.</p>
      * <p>1. 业务异常.</p>
+     * <p>2. 输入异常 (一些需要在 service 层校验的输入值).</p>
      *
      * @param ex 异常信息.
      * @return ResultResponse (code + message).
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(BusinessException.class)
+    @ExceptionHandler({
+            InputException.class, // 输入异常
+            BusinessException.class
+    })
     public ResultResponse badRequestExceptionHandler(BusinessException ex) {
         return warningException(ex);
     }

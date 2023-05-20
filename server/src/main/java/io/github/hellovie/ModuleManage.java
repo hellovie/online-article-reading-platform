@@ -1,7 +1,9 @@
 package io.github.hellovie;
 
+import io.github.hellovie.article.domain.enums.ArticleExceptionType;
 import io.github.hellovie.exception.CommonExceptionType;
 import io.github.hellovie.exception.IExceptionType;
+import io.github.hellovie.file.enums.FileExceptionType;
 import io.github.hellovie.user.domain.enums.UserExceptionType;
 
 /**
@@ -14,7 +16,13 @@ import io.github.hellovie.user.domain.enums.UserExceptionType;
  */
 public enum ModuleManage {
     /** 通用模块 */
-    COMMON_MODULE(10, CommonExceptionType.class), USER_MODULE(11, UserExceptionType.class),
+    COMMON_MODULE(10, CommonExceptionType.class),
+    /** 用户模块 */
+    USER_MODULE(11, UserExceptionType.class),
+    /** 文件模块 */
+    FILE_MODULE(12, FileExceptionType.class),
+    /** 文章模块 */
+    ARTICLE_MODULE(13, ArticleExceptionType.class),
 
     ;
 

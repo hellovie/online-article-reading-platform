@@ -30,6 +30,8 @@
                 <maven.compiler.target>1.8</maven.compiler.target>
 
                 <!-- 其他变量 -->
+                <!-- 测试数据生成 -->
+                <faker.version>1.0.2</faker.version>
                 <!-- swagger -->
                 <springfox.version>3.0.0</springfox.version>
                 <!-- hutool工具类 -->
@@ -57,6 +59,20 @@
     </profiles>
 
     <dependencies>
+        <!-- 测试数据生成 -->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>${faker.version}</version>
+            <exclusions>
+                <!-- 排除 snakeyaml -->
+                <exclusion>
+                    <artifactId>snakeyaml</artifactId>
+                    <groupId>org.yaml</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- swagger -->
         <dependency>
             <groupId>io.springfox</groupId>

@@ -83,7 +83,7 @@ public abstract class BaseAuthStrategy {
         User saveUser = userRepository.save(user);
 
         HashMap<String, Object> map = new HashMap<>(2);
-        map.put("user", userMapper.toDto(saveUser));
+        map.put("user", userMapper.toDTO(saveUser));
         map.put("token", TokenUtil.createToken(saveUser.getUsername()));
         return map;
     }
@@ -126,7 +126,7 @@ public abstract class BaseAuthStrategy {
         User newUser = userRepository.findByUsername(user.getUsername()).get();
 
         HashMap<String, Object> map = new HashMap<>(2);
-        map.put("user", userMapper.toDto(newUser));
+        map.put("user", userMapper.toDTO(newUser));
         map.put("token", TokenUtil.createToken(newUser.getUsername()));
         return map;
     }
