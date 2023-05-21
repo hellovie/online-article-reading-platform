@@ -11,8 +11,11 @@ const sendBug = () => {
   $Toast.info('功能紧急开发中...')
 }
 const search = () => {
-  $Toast.info('功能紧急开发中...')
+  emit('search', searchKey.value)
 }
+const emit = defineEmits([
+  'search'
+])
 </script>
 
 <template>

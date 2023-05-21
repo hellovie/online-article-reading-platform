@@ -26,6 +26,7 @@
   /** 承载内容的卡片背景颜色 */
   --main-card-bg--color: #fff;
   --main-card--shadow: 0 1px 3px hsla(0, 0%, 7%, .1);
+  --main-card-hover--shadow: 0 1px 5px hsla(0, 0%, 7%, .2);
   /** 分割线颜色 */
   --main-split-line--color: #F0F0F0;
   /** 提示框颜色 */

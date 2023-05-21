@@ -13,12 +13,12 @@ const pageData = reactive({
   pageSize: 0,
   articles: {}
 })
-// TODO: 下拉到底部刷新数据
 onMounted(() => {
   flushData()
 })
 const flushData = () => {
-  searchPagesApi(pageIndex.value, pageSize.value).then(res => {
+  const search = router.currentRoute.value.query.key ? router.currentRoute.value.query.key : ''
+  searchPagesApi(pageIndex.value, pageSize.value, search).then(res => {
     pageData.articles = res.content
     pageData.total = res.totalElements
     pageData.totalPages = res.totalPages

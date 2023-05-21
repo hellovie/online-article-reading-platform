@@ -20,7 +20,6 @@ export const useUserStore = defineStore('user', () => {
 
   function login (loginVO) {
     user.account = loginVO
-    console.log(user.account)
     token.value = loginVO.token
 
     window.sessionStorage.setItem('token', token.value)

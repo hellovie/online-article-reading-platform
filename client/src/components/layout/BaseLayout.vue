@@ -1,12 +1,13 @@
 <script setup>
 import { reactive, inject } from 'vue'
+import { useRouter } from 'vue-router'
 import EivIcon from '@/components/custom/EivIcon.vue'
 import UserCard from '@/components/card/UserCard.vue'
 import HeaderNav from './HeaderNav.vue'
 import FooterInfo from './FooterInfo.vue'
 import TodoCard from '@/components/card/TodoCard.vue'
 const $Toast = inject('Toast')
-
+const router = useRouter()
 const data = reactive({
   todoList: [
     // {
@@ -44,11 +45,22 @@ const data = reactive({
 const addTodo = () => {
   $Toast.info('功能紧急开发中...')
 }
+const search = (searchKey) => {
+  if (searchKey !== '') {
+    const route = router.resolve({
+      path: '/search',
+      query: {
+        key: searchKey
+      }
+    })
+    window.open(route.href, '_self')
+  }
+}
 </script>
 
 <template>
   <div class="base-layout">
-    <HeaderNav />
+    <HeaderNav v-on:search="search" />
     <div class="middle">
       <main class="main">
         <router-view />
@@ -102,9 +114,9 @@ const addTodo = () => {
   width: 670px;
   margin: 0px 10px;
   box-sizing: border-box;
-  box-shadow: var(--main-card--shadow);
+  /* box-shadow: var(--main-card--shadow);
   border: 1px solid var(--main-split-line--color);
-  background: var(--main-card-bg--color);
+  background: var(--main-card-bg--color); */
   overflow: auto;
 }
 .base-layout>.middle {

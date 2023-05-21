@@ -41,7 +41,7 @@ const openUserHomePage = () => {
 }
 const copyUsername = () => {
   const aux = document.createElement('input')
-  aux.setAttribute('value', user.username)
+  aux.setAttribute('value', user.account.username)
   document.body.appendChild(aux)
   aux.select()
   document.execCommand('copy')
