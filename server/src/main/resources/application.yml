@@ -42,3 +42,4 @@ hellovie:
     root-path: D:/local-storage
     avatar-path: /avatar
     default-path: /default
+    cover-path: /cover

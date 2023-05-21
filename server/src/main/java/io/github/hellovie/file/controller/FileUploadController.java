@@ -1,8 +1,16 @@
 package io.github.hellovie.file.controller;
 
+import com.github.ksuid.KsuidGenerator;
+import io.github.hellovie.core.util.ResultResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * 文件上传Api. <br>
@@ -44,4 +52,15 @@ public class FileUploadController {
     //     }
     //     return ResultResponse.success("上传文件失败!");
     // }
+
+    @ApiOperation("测试接口")
+    @GetMapping
+    public ResultResponse<HashMap<String, String>> test() {
+        String id = KsuidGenerator.generate();
+        String fileKey = (LocalDate.now() + UUID.randomUUID().toString()).replace("-", "");
+        HashMap<String, String> map = new HashMap<>(2);
+        map.put("id", id);
+        map.put("fileKey", fileKey);
+        return ResultResponse.success(map);
+    }
 }
