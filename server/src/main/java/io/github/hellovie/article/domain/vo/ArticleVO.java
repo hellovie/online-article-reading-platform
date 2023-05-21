@@ -2,6 +2,7 @@ package io.github.hellovie.article.domain.vo;
 
 import io.github.hellovie.article.domain.enums.ArticleStatus;
 import io.github.hellovie.article.domain.enums.CreationType;
+import io.github.hellovie.core.domain.BaseVO;
 import io.github.hellovie.user.domain.vo.UserVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,7 +18,7 @@ import lombok.Data;
  */
 @ApiModel("文章视图")
 @Data
-public class ArticleVO {
+public class ArticleVO extends BaseVO {
     /** 标题 */
     @ApiModelProperty(value = "标题")
     private String title;
