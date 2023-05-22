@@ -31,10 +31,22 @@ const isCurPath = (path) => {
   return false
 }
 const write = () => {
-  $Toast.info('功能紧急开发中...')
+  isLogin().then(res => {
+    if (res) {
+      $Toast.info('功能紧急开发中...')
+    } else {
+      $Toast.warning('请先登录账号!')
+    }
+  })
 }
 const openDraft = () => {
-  $Toast.info('功能紧急开发中...')
+  isLogin().then(res => {
+    if (res) {
+      $Toast.info('功能紧急开发中...')
+    } else {
+      $Toast.warning('请先登录账号!')
+    }
+  })
 }
 const openUserHomePage = () => {
   $Toast.info('功能紧急开发中...')
@@ -53,15 +65,16 @@ const exitLogin = () => {
   router.push('/login')
 }
 const navBtn = (path) => {
-  if (
-    path === '/' ||
-    path === '/fans' ||
-    path === '/collect' ||
-    path === '/creation' ||
-    path === '/hot' ||
-    path === '/follow'
-  ) {
+  if (path === '/' || path === '/hot') {
     router.push(path)
+  } else if (path === '/fans' || path === '/collect' || path === '/creation' || path === '/follow') {
+    isLogin().then(res => {
+      if (res) {
+        router.push(path)
+      } else {
+        $Toast.warning('请先登录账号!')
+      }
+    })
   }
 }
 </script>

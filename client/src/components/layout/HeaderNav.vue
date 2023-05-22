@@ -2,13 +2,21 @@
 import { ref, inject } from 'vue'
 import EivInput from '@/components/custom/EivInput.vue'
 import EivIcon from '@/components/custom/EivIcon.vue'
+import { useUserStore } from '@/stores/user'
 const $Toast = inject('Toast')
+const { isLogin } = useUserStore()
 
 const searchKey = ref('')
 const searchTips = ref('请输入关键字')
 
 const sendBug = () => {
-  $Toast.info('功能紧急开发中...')
+  isLogin().then(res => {
+    if (res) {
+      $Toast.info('功能紧急开发中...')
+    } else {
+      $Toast.warning('请先登录账号!')
+    }
+  })
 }
 const search = () => {
   emit('search', searchKey.value)

@@ -1,16 +1,20 @@
 <script setup>
-import { onMounted, reactive, computed } from 'vue'
+import { onMounted, reactive, computed, inject } from 'vue'
 import { getOneByIdApi } from '@/http/api/article'
 import { useRouter } from 'vue-router'
 import { MdPreview } from 'md-editor-v3'
 import EivIcon from '@/components/custom/EivIcon.vue'
 import 'md-editor-v3/lib/style.css'
 import { useArticleStore } from '@/stores/article'
+import { useUserStore } from '@/stores/user'
+const { isLogin } = useUserStore()
+const $Toast = inject('Toast')
 const { getCreationType } = useArticleStore()
 const { getStatus } = useArticleStore()
 const router = useRouter()
 const pageData = reactive({
-  article: {}
+  article: {},
+  author: {}
 })
 onMounted(() => {
   flushData()
@@ -25,10 +29,65 @@ const flushData = () => {
       pageData.article.status = getStatus(pageData.article.status)
       pageData.article.creationType = getCreationType(pageData.article.creationType)
       pageData.article.copyright = '**版权:** ' + pageData.article.copyright
-      console.log(res)
+      pageData.author = res.author
     })
   }
 }
+const followAuthor = () => {
+  isLogin().then(res => {
+    if (res) {
+      $Toast.info('功能紧急开发中...')
+    } else {
+      $Toast.warning('请先登录账号!')
+    }
+  })
+}
+const commentArticle = () => {
+  isLogin().then(res => {
+    if (res) {
+      $Toast.info('功能紧急开发中...')
+    } else {
+      $Toast.warning('请先登录账号!')
+    }
+  })
+}
+const collectArticle = () => {
+  isLogin().then(res => {
+    if (res) {
+      $Toast.info('功能紧急开发中...')
+    } else {
+      $Toast.warning('请先登录账号!')
+    }
+  })
+}
+const stepOnTheArticle = () => {
+  isLogin().then(res => {
+    if (res) {
+      $Toast.info('功能紧急开发中...')
+    } else {
+      $Toast.warning('请先登录账号!')
+    }
+  })
+}
+const likeTheArticle = () => {
+  isLogin().then(res => {
+    if (res) {
+      $Toast.info('功能紧急开发中...')
+    } else {
+      $Toast.warning('请先登录账号!')
+    }
+  })
+}
+const gotoAuthorHome = () => {
+  isLogin().then(res => {
+    if (res) {
+      $Toast.info('功能紧急开发中...')
+    } else {
+      $Toast.warning('请先登录账号!')
+    }
+  })
+}
+
 const creationTypeStyleVar = computed(() => {
   let bgColor = '#3b7d90'
   if (pageData.article.creationType === '原创') {
@@ -42,6 +101,21 @@ const creationTypeStyleVar = computed(() => {
   }
   return {
     '--creation-type--bg-color': bgColor
+  }
+})
+const statusStyleVar = computed(() => {
+  let bgColor = '#3b7d90'
+  if (pageData.article.status === '草稿') {
+    bgColor = '#900021'
+  }
+  if (pageData.article.status === '公开') {
+    bgColor = '#01847F'
+  }
+  if (pageData.article.status === '私密') {
+    bgColor = '#003152'
+  }
+  return {
+    '--status--bg-color': bgColor
   }
 })
 </script>
@@ -60,13 +134,22 @@ const creationTypeStyleVar = computed(() => {
           <EivIcon icon-class="modified-time" :icon-size="20" />
           <div>更新于: {{ pageData.article.gmtModified }}</div>
         </div>
-        <div class="author">
-          <!-- TODO: 作者昵称, 作者头像, 关注作者 -->
-        </div>
       </div>
     </header>
     <article class="article">
+      <div class="status" :style="statusStyleVar">{{ pageData.article.status }}</div>
       <MdPreview v-model="pageData.article.body" showCodeRowNumber readOnly />
+      <div class="author">
+        <img :src="pageData.author.avatar" alt="作者头像" class="avatar" @click="gotoAuthorHome" />
+        <div class="nickname singe-line">{{ pageData.author.nickname }}</div>
+        <div class="author-btn">
+          <EivIcon icon-class="follow-author" :icon-size="30" is-pointer is-hover v-on:click="followAuthor" />
+          <EivIcon icon-class="comment-article" :icon-size="30" is-pointer is-hover v-on:click="commentArticle" />
+          <EivIcon icon-class="collect-article" :icon-size="30" is-pointer is-hover v-on:click="collectArticle" />
+          <EivIcon icon-class="low-article" :icon-size="30" is-pointer is-hover v-on:click="stepOnTheArticle" />
+          <EivIcon icon-class="advanced-article" :icon-size="30" is-pointer is-hover v-on:click="likeTheArticle" />
+        </div>
+      </div>
     </article>
     <footer class="copyright">
       <div class="creation-type" :style="creationTypeStyleVar">{{ pageData.article.creationType }}</div>
@@ -85,6 +168,7 @@ const creationTypeStyleVar = computed(() => {
   padding: 10px;
   box-sizing: border-box;
   border-radius: 10px;
+  overflow: auto;
 }
 .article-container > .header {
   position: relative;
@@ -137,11 +221,69 @@ const creationTypeStyleVar = computed(() => {
   /* background-color: slateblue; */
 }
 .article-container > .article {
+  position: relative;
   box-shadow: var(--main-card--shadow);
   background: var(--main-card-bg--color);
   padding: 5px;
   box-sizing: border-box;
   border-radius: 10px;
+}
+.article-container > .article > .author {
+  display: flex;
+  align-items: center;
+  width: calc(100% - 20px);
+  height: 50px;
+  box-sizing: border-box;
+  margin: 10px;
+  padding: 0px 10px;
+  background: var(--user-card--bg-color);
+  border-top: 3px dashed var(--main-tips-border--color);
+}
+.article-container > .article > .author > .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 1.0s;
+}
+.article-container > .article > .author > .avatar:hover {
+  transform: rotate(360deg);
+}
+
+.article-container > .article > .author > .nickname {
+  width: 200px;
+  height: 40px;
+  line-height: 40px;
+  font-size: large;
+  font-weight: bold;
+  box-sizing: border-box;
+  margin: 0px 10px;
+  color: var(--user-card--nickname-color);
+}
+
+.article-container > .article > .author > .author-btn {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  gap: 10px;
+  width: calc(100% - 200px - 20px - 40px);
+  height: 40px;
+  overflow: auto;
+}
+.article-container > .article > .status {
+  position: absolute;
+  top: -20px;
+  left: 10px;
+  z-index: 999;
+  height: 30px;
+  width: 50px;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 30px;
+  font-weight: bold;
+  color: #fff;
+  background: var(--status--bg-color);
 }
 
 .article-container > .copyright {

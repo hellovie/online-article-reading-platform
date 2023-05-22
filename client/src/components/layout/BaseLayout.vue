@@ -6,6 +6,8 @@ import UserCard from '@/components/card/UserCard.vue'
 import HeaderNav from './HeaderNav.vue'
 import FooterInfo from './FooterInfo.vue'
 import TodoCard from '@/components/card/TodoCard.vue'
+import { useUserStore } from '@/stores/user'
+const { isLogin } = useUserStore()
 const $Toast = inject('Toast')
 const router = useRouter()
 const data = reactive({
@@ -43,7 +45,13 @@ const data = reactive({
   ]
 })
 const addTodo = () => {
-  $Toast.info('功能紧急开发中...')
+  isLogin().then(res => {
+    if (res) {
+      $Toast.info('功能紧急开发中...')
+    } else {
+      $Toast.warning('请先登录账号!')
+    }
+  })
 }
 const search = (searchKey) => {
   if (searchKey !== '') {
@@ -117,7 +125,7 @@ const search = (searchKey) => {
   /* box-shadow: var(--main-card--shadow);
   border: 1px solid var(--main-split-line--color);
   background: var(--main-card-bg--color); */
-  overflow: auto;
+  overflow: hidden;
 }
 .base-layout>.middle {
   position: absolute;

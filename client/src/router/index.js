@@ -63,4 +63,17 @@ const router = createRouter({
   ]
 })
 
+router.beforeEach((to, from, next) => {
+  // 如果是非登录页面, 直接跳转
+  if (to.name === 'login' || to.name === 'article' || to.name === 'hot' || to.name === 'search' || to.name === 'home' || to.name === 'error') {
+    next()
+  } else {
+    if (sessionStorage.getItem('token')) {
+      next()
+    } else {
+      router.push('/login')
+    }
+  }
+})
+
 export default router
