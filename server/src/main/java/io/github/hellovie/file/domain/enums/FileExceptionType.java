@@ -1,4 +1,4 @@
-package io.github.hellovie.file.enums;
+package io.github.hellovie.file.domain.enums;
 
 import io.github.hellovie.ModuleManage;
 import io.github.hellovie.exception.IExceptionType;
@@ -12,6 +12,11 @@ import io.github.hellovie.exception.IExceptionType;
  * @since JDK 1.8
  */
 public enum FileExceptionType implements IExceptionType {
+    /** 文件上传失败. */
+    FILE_UPLOAD_ERROR(1, "文件上传失败！"),
+    /** 文件为空. */
+    FILE_IS_EMPTY(2, "文件为空！"),
+
     ;
 
     /** 状态码 */
@@ -20,7 +25,7 @@ public enum FileExceptionType implements IExceptionType {
     private String message;
 
     FileExceptionType(int exceptionNum, String message) {
-        this.code = ModuleManage.USER_MODULE.num() + exceptionNum;
+        this.code = ModuleManage.FILE_MODULE.num() + exceptionNum;
         this.message = message;
     }
 

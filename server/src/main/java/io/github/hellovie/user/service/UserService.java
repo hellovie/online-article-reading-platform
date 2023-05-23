@@ -32,4 +32,12 @@ public interface UserService {
      * @return 用户个人账号信息.
      */
     UserDTO getUserAccountInfoByToken();
+
+    /**
+     * 设置用户头像.
+     *
+     * @param userId 用户 ID.
+     * @param fileId 头像文件 ID.
+     */
+    void setAvatar(String userId, String fileId);
 }

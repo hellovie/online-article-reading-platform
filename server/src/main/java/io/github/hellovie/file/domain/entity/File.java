@@ -1,9 +1,9 @@
 package io.github.hellovie.file.domain.entity;
 
 import io.github.hellovie.core.domain.TraceableBaseEntity;
-import io.github.hellovie.file.enums.FileStatus;
-import io.github.hellovie.file.enums.FileType;
-import io.github.hellovie.file.enums.StorageType;
+import io.github.hellovie.file.domain.enums.FileStatus;
+import io.github.hellovie.file.domain.enums.FileType;
+import io.github.hellovie.file.domain.enums.StorageType;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -36,7 +36,7 @@ public class File extends TraceableBaseEntity {
     private String ext;
 
     /** 文件大小 (byte) */
-    private Integer size = 0;
+    private Long size = 0L;
 
     /** 文件类型 */
     @Enumerated(EnumType.STRING)

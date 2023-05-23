@@ -5,17 +5,18 @@ import io.github.hellovie.file.domain.enums.FileStatus;
 import io.github.hellovie.file.domain.enums.FileType;
 import io.github.hellovie.file.domain.enums.StorageType;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 去除敏感数据的文件 DTO. <br>
+ * 上传文件 DTO.<br>
  *
  * @author hellovie <br>
- * @version 1.0.0 2023/5/14 <br>
+ * @version 1.0.0 2023/5/23 <br>
  * @Email hellovie@foxmail.com <br>
  * @since JDK 1.8
  */
 @Data
-public class FileDTO extends BaseDTO {
+public class FileUploadDTO extends BaseDTO {
     /** 文件名 */
     private String name;
 
@@ -39,4 +40,7 @@ public class FileDTO extends BaseDTO {
 
     /** 文件状态 */
     private FileStatus status;
+
+    /** 文件 */
+    private MultipartFile file;
 }

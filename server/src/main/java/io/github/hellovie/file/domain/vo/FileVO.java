@@ -1,16 +1,11 @@
 package io.github.hellovie.file.domain.vo;
 
 import io.github.hellovie.core.domain.BaseVO;
-import io.github.hellovie.file.enums.FileStatus;
-import io.github.hellovie.file.enums.FileType;
-import io.github.hellovie.file.enums.StorageType;
+import io.github.hellovie.file.domain.enums.FileStatus;
+import io.github.hellovie.file.domain.enums.FileType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 
 /**
  * 包含资源路径的文件 VO. <br>
@@ -27,17 +22,13 @@ public class FileVO extends BaseVO {
     @ApiModelProperty(value = "文件名")
     private String name;
 
-    /** 文件 hash 值 */
-    @ApiModelProperty(value = "文件 hash 值")
-    private String fileKey;
-
     /** 资源路径 */
     @ApiModelProperty(value = "资源路径")
     private String url;
 
     /** 文件大小 (byte) */
     @ApiModelProperty(value = "文件大小 (byte)")
-    private Integer size;
+    private Long size;
 
     /** 文件类型 */
     @ApiModelProperty(value = "文件类型")

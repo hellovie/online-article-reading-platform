@@ -28,11 +28,12 @@ spring:
     enabled: true
     encoding: UTF-8
 
-  #设置单个文件的大小
   servlet:
     multipart:
+      enabled: true
+      #设置单个文件的大小
       max-file-size: 50MB
-  #设置单次请求的文件的总大小
+      #设置单次请求的文件的总大小
       max-request-size: 50MB
 
 # 本地文件上传地址

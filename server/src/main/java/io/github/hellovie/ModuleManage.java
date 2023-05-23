@@ -3,7 +3,7 @@ package io.github.hellovie;
 import io.github.hellovie.article.domain.enums.ArticleExceptionType;
 import io.github.hellovie.exception.CommonExceptionType;
 import io.github.hellovie.exception.IExceptionType;
-import io.github.hellovie.file.enums.FileExceptionType;
+import io.github.hellovie.file.domain.enums.FileExceptionType;
 import io.github.hellovie.user.domain.enums.UserExceptionType;
 
 /**

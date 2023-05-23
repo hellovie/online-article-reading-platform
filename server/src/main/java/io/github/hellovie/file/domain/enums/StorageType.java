@@ -1,4 +1,4 @@
-package io.github.hellovie.file.enums;
+package io.github.hellovie.file.domain.enums;
 
 /**
  * 存储服务类型. <br>

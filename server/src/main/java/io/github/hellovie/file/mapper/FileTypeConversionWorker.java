@@ -1,12 +1,12 @@
 package io.github.hellovie.file.mapper;
 
 import io.github.hellovie.file.domain.dto.FileDTO;
-import io.github.hellovie.file.service.FileUploadService;
+import io.github.hellovie.file.service.StorageService;
 import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.net.UnknownHostException;
+import java.util.Map;
 
 /**
  * Mapping 通用转换 (mapstruct). <br>
@@ -18,22 +18,42 @@ import java.net.UnknownHostException;
  */
 @Component
 public class FileTypeConversionWorker {
-    @Resource(name = "fileUploadServiceImpl")
-    private FileUploadService fileUploadService;
+    @Resource
+    private Map<String, StorageService> storageServiceMap;
 
     /**
      * FileDTO 转换为完整的资源路径地址.
      *
      * @param fileDTO FileDTO
-     * @return 完整的资源路径地址
-     * @throws UnknownHostException
+     * @return 完整的资源路径地址, 找不到则为"".
      */
     @Named("toFullPath")
-    public String toJsonString(FileDTO fileDTO) throws UnknownHostException {
-        if (fileDTO != null) {
-            String rootPath = fileUploadService.getStorageService(fileDTO.getStorage()).getRootPath();
-            return fileDTO.getFullPath(rootPath);
+    public String toFullPath(FileDTO fileDTO) {
+        String relativePath = getRelativePath(fileDTO);
+
+        if (fileDTO != null && relativePath != null) {
+            StorageService storageService = storageServiceMap.get(fileDTO.getStorage().name());
+            String path = storageService.getFullPath(relativePath);
+            return path;
         }
         return "";
+    }
+
+    /**
+     * 获取资源相对路径.
+     *
+     * @param fileDTO FileDTO
+     * @return 拼接路径的值缺失则返回 null.
+     */
+    private String getRelativePath(FileDTO fileDTO) {
+        if (fileDTO != null) {
+            String fileKey = fileDTO.getFileKey();
+            String path = fileDTO.getPath();
+            String ext = fileDTO.getExt();
+            if (fileKey != null && path != null && ext != null && !fileKey.isEmpty() && !path.isEmpty() && !ext.isEmpty()) {
+                return path + "/" + fileKey + '.' + ext;
+            }
+        }
+        return null;
     }
 }

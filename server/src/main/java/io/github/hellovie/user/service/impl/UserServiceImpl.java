@@ -2,6 +2,7 @@ package io.github.hellovie.user.service.impl;
 
 import io.github.hellovie.exception.business.DatabaseFieldNotFoundException;
 import io.github.hellovie.exception.business.ForbiddenException;
+import io.github.hellovie.file.domain.entity.File;
 import io.github.hellovie.security.CustomUser;
 import io.github.hellovie.user.domain.dto.UserDTO;
 import io.github.hellovie.user.domain.entity.Role;
@@ -130,6 +131,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDTO getUserAccountInfoByToken() {
         return getCurrentUser();
+    }
+
+    /**
+     * 设置用户头像.
+     *
+     * @param userId 用户 ID.
+     * @param fileId 头像文件 ID.
+     */
+    @Override
+    public void setAvatar(String userId, String fileId) {
+        User user = checkUserById(userId);
+        if (fileId != null && !"".equals(fileId)) {
+            File file = new File();
+            file.setId(fileId);
+            user.setAvatar(file);
+            userRepository.save(user);
+        }
     }
 
     /**

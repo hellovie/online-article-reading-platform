@@ -22,7 +22,7 @@ public enum ArticleExceptionType implements IExceptionType {
     private String message;
 
     ArticleExceptionType(int exceptionNum, String message) {
-        this.code = ModuleManage.USER_MODULE.num() + exceptionNum;
+        this.code = ModuleManage.ARTICLE_MODULE.num() + exceptionNum;
         this.message = message;
     }
 
