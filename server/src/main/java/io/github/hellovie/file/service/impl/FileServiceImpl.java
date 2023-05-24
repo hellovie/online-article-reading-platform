@@ -1,5 +1,6 @@
 package io.github.hellovie.file.service.impl;
 
+import io.github.hellovie.exception.business.DatabaseFieldNotFoundException;
 import io.github.hellovie.exception.business.FileUploadException;
 import io.github.hellovie.exception.business.ForbiddenException;
 import io.github.hellovie.file.domain.dto.FileDTO;
@@ -23,11 +24,14 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static io.github.hellovie.file.config.LocalUploadProperties.AVATAR_PATH;
 import static io.github.hellovie.file.domain.enums.FileExceptionType.FILE_IS_EMPTY;
+import static io.github.hellovie.file.domain.enums.FileExceptionType.FILE_NOT_FOUND;
 import static io.github.hellovie.user.domain.enums.UserExceptionType.NO_PERMISSION;
+import static io.github.hellovie.user.domain.enums.UserExceptionType.USER_NOT_FOUND;
 
 /**
  * 文件服务实现. <br>
@@ -126,6 +130,32 @@ public class FileServiceImpl implements FileService {
     @Override
     public StorageType getDefaultStorageType() {
         return StorageType.LOCAL_STORAGE;
+    }
+
+    /**
+     * 根据文件 ID 获取文件信息.
+     *
+     * @param id 文件 ID.
+     * @return 文件信息.
+     */
+    @Override
+    public FileDTO getById(String id) {
+        return fileMapper.toDTO(checkFileById(id));
+    }
+
+    /**
+     * 判断文件是否存在, 不存在则抛出异常.
+     *
+     * @param id ID
+     * @return 用户信息.
+     * @throw DatabaseFieldNotFoundException 文件不存在.
+     */
+    private File checkFileById(String id) {
+        Optional<File> file = fileRepository.findById(id);
+        if (!file.isPresent()) {
+            throw new DatabaseFieldNotFoundException(FILE_NOT_FOUND);
+        }
+        return file.get();
     }
 
     /**

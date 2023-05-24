@@ -16,7 +16,10 @@ public enum FileExceptionType implements IExceptionType {
     FILE_UPLOAD_ERROR(1, "文件上传失败！"),
     /** 文件为空. */
     FILE_IS_EMPTY(2, "文件为空！"),
-
+    /** 不支持的文件格式. */
+    UNSUPPORTED_FILE_FORMATS(3, "不支持的文件格式！"),
+    /** 文件不存在. */
+    FILE_NOT_FOUND(4, "文件不存在！")
     ;
 
     /** 状态码 */

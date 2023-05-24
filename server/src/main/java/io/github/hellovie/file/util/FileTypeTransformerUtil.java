@@ -1,7 +1,10 @@
 package io.github.hellovie.file.util;
 
+import io.github.hellovie.exception.business.FileUploadException;
 import io.github.hellovie.file.config.UploadFileConfig;
 import io.github.hellovie.file.domain.enums.FileType;
+
+import static io.github.hellovie.file.domain.enums.FileExceptionType.UNSUPPORTED_FILE_FORMATS;
 
 /**
  * 文件后缀和 FileType 之间转换. <br>
@@ -31,8 +34,8 @@ public class FileTypeTransformerUtil {
         if (isVideo(ext)) {
             return FileType.VIDEO;
         }
-
-        return FileType.OTHER;
+        throw new FileUploadException(UNSUPPORTED_FILE_FORMATS);
+        // return FileType.OTHER;
     }
 
     /**

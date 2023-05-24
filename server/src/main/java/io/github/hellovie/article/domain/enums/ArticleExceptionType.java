@@ -14,6 +14,8 @@ import io.github.hellovie.exception.IExceptionType;
 public enum ArticleExceptionType implements IExceptionType {
     /** 文章不存在. */
     ARTICLE_NOT_FOUND(1, "文章不存在！"),
+    /** 缺少引用地址. */
+    MISS_QUOTE_URL(2, "缺少引用地址！"),
     ;
 
     /** 状态码 */

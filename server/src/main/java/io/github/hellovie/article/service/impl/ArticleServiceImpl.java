@@ -2,6 +2,8 @@ package io.github.hellovie.article.service.impl;
 
 import io.github.hellovie.article.domain.dto.ArticleDTO;
 import io.github.hellovie.article.domain.entity.Article;
+import io.github.hellovie.article.domain.enums.ArticleStatus;
+import io.github.hellovie.article.domain.request.CreateArticleRequest;
 import io.github.hellovie.article.mapper.ArticleMapper;
 import io.github.hellovie.article.repository.ArticleRepository;
 import io.github.hellovie.article.repository.ArticleSpecification;
@@ -9,19 +11,26 @@ import io.github.hellovie.article.service.ArticleService;
 import io.github.hellovie.core.specs.SearchCriteria;
 import io.github.hellovie.core.specs.SearchOperation;
 import io.github.hellovie.exception.business.DatabaseFieldNotFoundException;
+import io.github.hellovie.exception.business.ForbiddenException;
+import io.github.hellovie.exception.business.InputException;
+import io.github.hellovie.file.domain.entity.File;
+import io.github.hellovie.file.service.FileService;
+import io.github.hellovie.user.domain.dto.UserDTO;
 import io.github.hellovie.user.domain.entity.User;
+import io.github.hellovie.user.domain.enums.UserExceptionType;
+import io.github.hellovie.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-
 import java.util.Optional;
 
 import static io.github.hellovie.article.domain.enums.ArticleExceptionType.ARTICLE_NOT_FOUND;
+import static io.github.hellovie.article.domain.enums.ArticleExceptionType.MISS_QUOTE_URL;
 import static io.github.hellovie.article.domain.enums.ArticleStatus.*;
-import static io.github.hellovie.user.domain.enums.UserExceptionType.USER_NOT_FOUND;
+import static io.github.hellovie.article.domain.enums.CreationType.*;
 
 /**
  * 文章服务实现类. <br>
@@ -38,6 +47,10 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleRepository articleRepository;
     @Resource
     private ArticleMapper articleMapper;
+    @Resource(name = "userServiceImpl")
+    private UserService userService;
+    @Resource(name = "fileServiceImpl")
+    FileService fileService;
 
     /**
      * 模糊分页查询文章.
@@ -70,6 +83,68 @@ public class ArticleServiceImpl implements ArticleService {
             throw new DatabaseFieldNotFoundException(ARTICLE_NOT_FOUND);
         }
         return articleMapper.toDTO(article);
+    }
+
+    /**
+     * 设置文章状态.
+     *
+     * @param id     文章 ID.
+     * @param status 文章状态.
+     */
+    @Override
+    public void setArticleStatus(String id, ArticleStatus status) {
+        UserDTO currentUser = userService.getCurrentUser();
+        Article article = checkArticleById(id);
+        // 修改文章的用户和文章作者不是同一人, 抛出权限不足异常.
+        if (currentUser.getId() != article.getAuthor().getId()) {
+            throw new ForbiddenException(UserExceptionType.NO_PERMISSION);
+        }
+        article.setStatus(status);
+        articleRepository.save(article);
+    }
+
+    /**
+     * 创建文章.
+     *
+     * @param request 文章信息.
+     * @return ArticleDTO.
+     */
+    @Override
+    public ArticleDTO create(CreateArticleRequest request) {
+        UserDTO currentUser = userService.getCurrentUser();
+        User user = new User();
+        user.setId(currentUser.getId());
+        Article article = new Article();
+        article.setTitle(request.getTitle())
+        	.setArticleAbstract(request.getArticleAbstract())
+        	.setBody(request.getBody())
+        	.setStatus(DRAFT)
+        	.setAuthor(user);
+
+        if (ORIGINAL.name().equals(request.getCreationType())) {
+            article.setCreationType(ORIGINAL);
+        } else if (REPRODUCE.name().equals(request.getCreationType())) {
+            article.setCreationType(REPRODUCE);
+        } else if (TRANSLATE.name().equals(request.getCreationType())) {
+            article.setCreationType(TRANSLATE);
+        }
+
+        if (request.getCoverId() != null && !"".equals(request.getCoverId())) {
+            File cover = new File();
+            cover.setId(fileService.getById(request.getCoverId()).getId());
+            article.setCover(cover);
+        }
+
+        if (article.getCreationType() == ORIGINAL) {
+            article.setCopyright("本文为博主原创文章，遵循[ CC 4.0 BY-SA ](http://creativecommons.org/licenses/by-sa/4.0/)版权协议，转载请附上原文出处链接和本声明。");
+        } else if ("".equals(request.getQuote())) {
+            throw new InputException(MISS_QUOTE_URL);
+        } else {
+            article.setCopyright(request.getQuote());
+        }
+
+        Article save = articleRepository.save(article);
+        return articleMapper.toDTO(save);
     }
 
     /**

@@ -46,4 +46,12 @@ public interface FileService {
      * @return FileDTO.
      */
     FileDTO uploadUserAvatar(String id, MultipartFile file);
+
+    /**
+     * 根据文件 ID 获取文件信息.
+     *
+     * @param id 文件 ID.
+     * @return 文件信息.
+     */
+    FileDTO getById(String id);
 }

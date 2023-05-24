@@ -1,5 +1,7 @@
 package io.github.hellovie.article.controller;
 
+import io.github.hellovie.article.domain.enums.ArticleStatus;
+import io.github.hellovie.article.domain.request.CreateArticleRequest;
 import io.github.hellovie.article.domain.vo.ArticleVO;
 import io.github.hellovie.article.mapper.ArticleMapper;
 import io.github.hellovie.article.service.ArticleService;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -86,6 +89,58 @@ public class ArticleController {
             @NotBlank(message = "文章ID不能为空！")
                     String id) {
         ArticleVO articleVO = articleMapper.toVO(articleService.getOneById(id));
+        return ResultResponse.success(articleVO);
+    }
+
+    /**
+     * 将文章设置为发布状态.
+     *
+     * @param id 文章 ID.
+     * @return 无数据返回.
+     */
+    @ApiOperation("发布文章")
+    @PutMapping("/publish/{id}")
+    public ResultResponse publishArticle(@PathVariable String id) {
+        articleService.setArticleStatus(id, ArticleStatus.OPENNESS);
+        return ResultResponse.success(null);
+    }
+
+    /**
+     * 将文章设置为草稿状态.
+     *
+     * @param id 文章 ID.
+     * @return 无数据返回.
+     */
+    @ApiOperation("将文章设置为草稿状态")
+    @PutMapping("/draft/{id}")
+    public ResultResponse draftArticle(@PathVariable String id) {
+        articleService.setArticleStatus(id, ArticleStatus.DRAFT);
+        return ResultResponse.success(null);
+    }
+
+    /**
+     * 将文章设置为私密状态.
+     *
+     * @param id 文章 ID.
+     * @return 无数据返回.
+     */
+    @ApiOperation("将文章设置为私密状态")
+    @PutMapping("/privacy/{id}")
+    public ResultResponse privacyArticle(@PathVariable String id) {
+        articleService.setArticleStatus(id, ArticleStatus.PRIVACY);
+        return ResultResponse.success(null);
+    }
+
+    /**
+     * 新建文章.
+     *
+     * @param request 文章信息.
+     * @return ArticleVO.
+     */
+    @ApiOperation("新建文章")
+    @PostMapping
+    public ResultResponse<ArticleVO> create(@Valid @RequestBody CreateArticleRequest request) {
+        ArticleVO articleVO = articleMapper.toVO(articleService.create(request));
         return ResultResponse.success(articleVO);
     }
 }
