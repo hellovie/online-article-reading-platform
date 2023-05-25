@@ -33,7 +33,8 @@ const isCurPath = (path) => {
 const write = () => {
   isLogin().then(res => {
     if (res) {
-      $Toast.info('功能紧急开发中...')
+      const route = router.resolve('/write')
+      window.open(route.href, '_blank')
     } else {
       $Toast.warning('请先登录账号!')
     }

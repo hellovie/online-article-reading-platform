@@ -11,13 +11,28 @@ export const searchPagesApi = (pageIndex, pageSize, search, sort) => {
   }
   return serviceAxios({
     method: 'GET',
-    url: `articles/views/${pageIndex}/${pageSize}${parms}`
+    url: `/articles/views/${pageIndex}/${pageSize}${parms}`
   })
 }
 
 export const getOneByIdApi = (id) => {
   return serviceAxios({
     method: 'GET',
-    url: `articles/views/${id}`
+    url: `/articles/views/${id}`
+  })
+}
+
+export const createApi = (parms) => {
+  return serviceAxios({
+    method: 'POST',
+    url: '/articles',
+    data: parms
+  })
+}
+
+export const publishArticleApi = (id) => {
+  return serviceAxios({
+    method: 'PUT',
+    url: `/articles/publish/${id}`
   })
 }

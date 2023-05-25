@@ -3,7 +3,7 @@ import serviceAxios from '../index'
 export const loginApi = (params) => {
   return serviceAxios({
     method: 'POST',
-    url: 'users/login',
+    url: '/users/login',
     data: params
   })
 }
@@ -11,7 +11,7 @@ export const loginApi = (params) => {
 export const registerApi = (params) => {
   return serviceAxios({
     method: 'POST',
-    url: 'users/register',
+    url: '/users/register',
     data: params
   })
 }
@@ -19,6 +19,6 @@ export const registerApi = (params) => {
 export const getUserAccountInfoApi = () => {
   return serviceAxios({
     method: 'GET',
-    url: 'users'
+    url: '/users'
   })
 }
