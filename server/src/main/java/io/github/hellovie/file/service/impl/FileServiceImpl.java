@@ -2,7 +2,6 @@ package io.github.hellovie.file.service.impl;
 
 import io.github.hellovie.exception.business.DatabaseFieldNotFoundException;
 import io.github.hellovie.exception.business.FileUploadException;
-import io.github.hellovie.exception.business.ForbiddenException;
 import io.github.hellovie.file.domain.dto.FileDTO;
 import io.github.hellovie.file.domain.dto.FileUploadDTO;
 import io.github.hellovie.file.domain.entity.File;
@@ -18,7 +17,6 @@ import io.github.hellovie.user.domain.dto.UserDTO;
 import io.github.hellovie.user.domain.entity.User;
 import io.github.hellovie.user.service.UserService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -30,8 +28,6 @@ import java.util.UUID;
 import static io.github.hellovie.file.config.LocalUploadProperties.AVATAR_PATH;
 import static io.github.hellovie.file.domain.enums.FileExceptionType.FILE_IS_EMPTY;
 import static io.github.hellovie.file.domain.enums.FileExceptionType.FILE_NOT_FOUND;
-import static io.github.hellovie.user.domain.enums.UserExceptionType.NO_PERMISSION;
-import static io.github.hellovie.user.domain.enums.UserExceptionType.USER_NOT_FOUND;
 
 /**
  * 文件服务实现. <br>
@@ -66,20 +62,15 @@ public class FileServiceImpl implements FileService {
     /**
      * 上传文件.
      *
-     * @param id 上传用户.
      * @param file 上传文件的详细信息.
      * @param path 上传文件的相对路径.
      * @return FileDTO.
      */
     @Override
-    public FileDTO uploadFile(String id, MultipartFile file, String path) {
+    public FileDTO uploadFile(MultipartFile file, String path) {
         UserDTO currentUser = userService.getCurrentUser();
-        // 当前访问用户和上传用户不一致.
-        if (currentUser == null || !currentUser.getId().equals(id)) {
-            throw new ForbiddenException(NO_PERMISSION);
-        }
         User user = new User();
-        user.setId(id);
+        user.setId(currentUser.getId());
 
         // 文件校验
         verifyFile(file);
@@ -111,14 +102,13 @@ public class FileServiceImpl implements FileService {
     /**
      * 上传用户头像.
      *
-     * @param id   上传用户.
      * @param file 上传文件的详细信息.
      * @return FileDTO.
      */
     @Override
-    public FileDTO uploadUserAvatar(String id, MultipartFile file) {
-        FileDTO fileDTO = uploadFile(id, file, AVATAR_PATH);
-        userService.setAvatar(id, fileDTO.getId());
+    public FileDTO uploadUserAvatar(MultipartFile file) {
+        FileDTO fileDTO = uploadFile(file, AVATAR_PATH);
+        userService.setAvatar(userService.getCurrentUser().getId(), fileDTO.getId());
         return fileDTO;
     }
 
@@ -164,7 +154,7 @@ public class FileServiceImpl implements FileService {
      * @param file 用户上传的文件.
      */
     private void verifyFile(MultipartFile file) {
-        if (file.isEmpty()) {
+        if (file == null || file.isEmpty()) {
             throw new FileUploadException(FILE_IS_EMPTY);
         }
     }

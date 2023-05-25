@@ -44,3 +44,4 @@ hellovie:
     avatar-path: /avatar
     default-path: /default
     cover-path: /cover
+    image-path: /images

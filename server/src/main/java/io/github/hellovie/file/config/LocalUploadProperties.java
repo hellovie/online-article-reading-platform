@@ -30,10 +30,15 @@ public class LocalUploadProperties implements InitializingBean {
     @Value("${hellovie.file.cover-path}")
     private String coverPath;
 
+    /** 图片存储地址 */
+    @Value("${hellovie.file.image-path}")
+    private String imagePath;
+
     public static String ROOT_PATH;
     public static String AVATAR_PATH;
     public static String DEFAULT_PATH;
     public static String COVER_PATH;
+    public static String IMAGE_PATH;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -41,5 +46,6 @@ public class LocalUploadProperties implements InitializingBean {
         AVATAR_PATH = rootPath + avatarPath;
         DEFAULT_PATH = rootPath + defaultPath;
         COVER_PATH = rootPath + coverPath;
+        IMAGE_PATH = rootPath + imagePath;
     }
 }

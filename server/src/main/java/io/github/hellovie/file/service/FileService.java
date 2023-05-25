@@ -24,12 +24,11 @@ public interface FileService {
     /**
      * 上传文件.
      *
-     * @param id 上传用户.
      * @param file 上传文件的详细信息.
      * @param path 上传文件的相对路径.
      * @return FileDTO.
      */
-    FileDTO uploadFile(String id, MultipartFile file, String path);
+    FileDTO uploadFile(MultipartFile file, String path);
 
     /**
      * 获取默认的存储方式.
@@ -41,11 +40,10 @@ public interface FileService {
     /**
      * 上传用户头像.
      *
-     * @param id 上传用户.
      * @param file 上传文件的详细信息.
      * @return FileDTO.
      */
-    FileDTO uploadUserAvatar(String id, MultipartFile file);
+    FileDTO uploadUserAvatar(MultipartFile file);
 
     /**
      * 根据文件 ID 获取文件信息.

@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 
 import static io.github.hellovie.file.config.LocalUploadProperties.COVER_PATH;
+import static io.github.hellovie.file.config.LocalUploadProperties.IMAGE_PATH;
 
 /**
  * 文件上传Api. <br>
@@ -34,28 +35,39 @@ public class FileUploadController {
     /**
      * 头像上传.
      *
-     * @param id 上传用户 ID.
      * @param avatar 上传头像文件.
      * @return File VO.
      */
     @ApiOperation("头像上传")
-    @PostMapping("/avatar/{id}")
-    public ResultResponse<FileVO> uploadAvatar(@PathVariable String id, @RequestBody MultipartFile avatar) {
-        FileDTO fileDTO = fileService.uploadUserAvatar(id, avatar);
+    @PostMapping("/avatar")
+    public ResultResponse<FileVO> uploadAvatar(@RequestBody MultipartFile avatar) {
+        FileDTO fileDTO = fileService.uploadUserAvatar(avatar);
         return ResultResponse.success(fileMapper.toVO(fileDTO));
     }
 
     /**
      * 文章封面上传.
      *
-     * @param id 上传用户 ID.
      * @param cover 上传文章封面文件.
      * @return File VO.
      */
     @ApiOperation("文章封面上传")
-    @PostMapping("/cover/{id}")
-    public ResultResponse<FileVO> uploadArticleCover(@PathVariable String id, @RequestBody MultipartFile cover) {
-        FileDTO fileDTO = fileService.uploadFile(id, cover, COVER_PATH);
+    @PostMapping("/cover")
+    public ResultResponse<FileVO> uploadArticleCover(@RequestBody MultipartFile cover) {
+        FileDTO fileDTO = fileService.uploadFile(cover, COVER_PATH);
+        return ResultResponse.success(fileMapper.toVO(fileDTO));
+    }
+
+    /**
+     * 图片上传.
+     *
+     * @param image 图片文件.
+     * @return File VO.
+     */
+    @ApiOperation("图片上传")
+    @PostMapping("/image")
+    public ResultResponse<FileVO> uploadImage(@RequestBody MultipartFile image) {
+        FileDTO fileDTO = fileService.uploadFile(image, IMAGE_PATH);
         return ResultResponse.success(fileMapper.toVO(fileDTO));
     }
 }
